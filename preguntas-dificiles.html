@@ -690,7 +690,7 @@ function renderMCQ(){
   const done=confirmed||peeked;
   const answered=isMulti?confirmed:(ex.ans[ex.cur]!==null);
   const pendingMulti=isMulti&&Array.isArray(ex.ans[ex.cur])?ex.ans[ex.cur]:[];
-  const L=['A','B','C','D','E'];
+  const L='ABCDEFGHIJ'.split('');
 
   const multiHint=isMulti
     ?`<div style="font-size:11px;color:var(--amber);margin-bottom:8px;font-family:var(--mono);padding:6px 10px;background:var(--amber-dim);border:1px solid var(--amber-b);border-radius:6px">▣ SELECCIÓN MÚLTIPLE — Elige ${q.ans.length} opciones</div>`:'';
@@ -776,10 +776,10 @@ function renderDDQ(){
   const ds=ex.ddState[ex.cur]||(ex.ddState[ex.cur]={slots:new Array(q.ans.length).fill(null),sel:null});
 
   const usedItems=ds.slots.filter(s=>s!==null);
-  const poolHTML=q.items.map(item=>{
+  const poolHTML=q.items.map((item,idx)=>{
     const used=!done&&usedItems.includes(item);
     const sel=!done&&ds.sel===item;
-    return `<div class="dd-item${used?' used':''}${sel?' selected':''}" onclick="clickDDItem(${JSON.stringify(item)})">${item}</div>`;
+    return `<div class="dd-item${used?' used':''}${sel?' selected':''}" data-didx="${idx}" onclick="clickDDItem(parseInt(this.dataset.didx))">${item}</div>`;
   }).join('');
 
   const slotsHTML=ds.slots.map((val,n)=>{
@@ -818,7 +818,9 @@ function renderDDQ(){
   scrollDot();
 }
 
-function clickDDItem(item){
+function clickDDItem(idx){
+  const q=ex.qs[ex.cur];
+  const item=q.items[idx];
   const ds=ex.ddState[ex.cur];
   if(!ds||ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
   const slotIdx=ds.slots.indexOf(item);
@@ -1027,7 +1029,7 @@ function closeModal(){$('modal-area').innerHTML='';}
 function finish(){
   const tot=ex.qs.length,sc=ex.sc,pct=Math.round((sc/tot)*100);
   const col=pct>=80?'var(--green)':pct>=70?'var(--amber)':'var(--red)';
-  const L=['A','B','C','D','E'];
+  const L='ABCDEFGHIJ'.split('');
 
   const rows=ex.qs.map((q,i)=>{
     const answered=isQAnswered(i);
@@ -1112,7 +1114,7 @@ function startFlashcards(mode){
 }
 
 function fcAnswerHTML(q){
-  const L=['A','B','C','D','E'];
+  const L='ABCDEFGHIJ'.split('');
   if(q.type==='mc'){
     const isMulti=Array.isArray(q.ans);
     if(isMulti){
