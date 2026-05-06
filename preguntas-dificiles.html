@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZ-104 · Preguntas Difíciles</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--surface3:#212d42;
+  --border:rgba(100,160,255,0.1);--border-md:rgba(100,160,255,0.2);--border-lg:rgba(100,160,255,0.38);
+  --accent:#3b82f6;--accent-dim:rgba(59,130,246,0.13);
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.12);--green-b:rgba(34,197,94,0.35);
+  --red:#ef4444;--red-dim:rgba(239,68,68,0.12);--red-b:rgba(239,68,68,0.35);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,0.12);--amber-b:rgba(245,158,11,0.3);
+  --text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  --r:8px;--rl:14px;--tr:.18s cubic-bezier(.4,0,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+.hidden{display:none!important}
+#app{max-width:720px;margin:0 auto;padding:1.25rem 1rem 5rem}
+.app-header{display:flex;align-items:center;gap:12px;padding:.75rem 0 1.25rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.logo{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid var(--border-lg);border-radius:6px;padding:4px 10px;letter-spacing:.1em}
+.app-header h1{font-size:14px;font-weight:400;color:var(--text-dim)}
+.slabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);font-family:var(--mono);margin-bottom:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:12px}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-family:var(--mono);margin-bottom:12px}
+.line-accent{width:32px;height:2px;background:var(--accent);border-radius:1px;margin-bottom:1rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.metric{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 12px;text-align:center}
+.metric-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
+.metric-value{font-size:26px;font-weight:600;font-family:var(--mono)}
+.r-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin:8px 0}
+.r-fill{height:100%;border-radius:3px;transition:width .8s}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;border:1px solid var(--border-md);border-radius:var(--r);background:transparent;color:var(--text);font-size:14px;font-family:var(--sans);cursor:pointer;transition:all var(--tr);font-weight:400;text-align:center}
+.btn:hover{background:var(--surface2);border-color:var(--border-lg)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn-p{background:var(--accent-dim);border-color:rgba(59,130,246,.4);color:#93c5fd;font-weight:500}
+.btn-p:hover{background:rgba(59,130,246,.22)}
+.btn-g{background:var(--green-dim);border-color:var(--green-b);color:#86efac}
+.btn-sm{width:auto;padding:7px 14px;font-size:12px}
+.btn-group{display:flex;flex-direction:column;gap:8px}
+.badge{display:inline-block;font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:4px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.b-blue{background:var(--accent-dim);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.b-green{background:var(--green-dim);color:#86efac;border:1px solid rgba(34,197,94,.25)}
+.b-red{background:var(--red-dim);color:#fca5a5;border:1px solid rgba(239,68,68,.25)}
+.b-amber{background:var(--amber-dim);color:#fcd34d;border:1px solid rgba(245,158,11,.25)}
+.b-purple{background:rgba(139,92,246,0.13);color:#c4b5fd;border:1px solid rgba(139,92,246,.3)}
+.b-teal{background:rgba(20,184,166,0.13);color:#5eead4;border:1px solid rgba(20,184,166,.3)}
+.exam-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.q-counter{font-family:var(--mono);font-size:13px;color:var(--text-muted);white-space:nowrap}
+.prog-out{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:14px}
+.prog-in{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:12px;font-size:15px;line-height:1.8;animation:slideUp .2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:13px 16px;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;transition:all var(--tr);font-family:var(--sans);line-height:1.55}
+.opt:hover:not(:disabled){background:var(--surface2);border-color:var(--border-md)}
+.opt-l{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;border-radius:50%;background:var(--surface2);border:1px solid var(--border-md);font-size:11px;font-family:var(--mono);flex-shrink:0;margin-top:1px}
+.opt.correct{background:var(--green-dim);border-color:var(--green-b);color:#bbf7d0}
+.opt.correct .opt-l{background:rgba(34,197,94,.22);border-color:var(--green-b);color:#86efac}
+.opt.wrong{background:var(--red-dim);border-color:var(--red-b);color:#fecaca}
+.opt.wrong .opt-l{background:rgba(239,68,68,.2);border-color:var(--red-b);color:#fca5a5}
+.opt.reveal-c{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.25);color:#bbf7d0}
+.opt.selected-pending{background:var(--accent-dim);border-color:rgba(59,130,246,.4);color:#93c5fd}
+.opt.selected-pending .opt-l{background:rgba(59,130,246,.2);border-color:rgba(59,130,246,.4);color:#93c5fd}
+.opt:disabled{cursor:default}
+.exp{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:14px 16px;margin-top:6px;font-size:13px;color:var(--text-dim);line-height:1.75;animation:fadeUp .22s ease}
+.exp .verd{font-family:var(--mono);font-size:10px;letter-spacing:.08em;margin-bottom:8px;display:block;text-transform:uppercase}
+.vok{color:var(--green)}.vbad{color:var(--red)}.vpeek{color:var(--amber)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.dd-pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+.dd-item{background:var(--surface2);border:1.5px solid var(--border-md);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;color:var(--text-dim);transition:all var(--tr);user-select:none}
+.dd-item:hover{border-color:var(--accent);color:var(--text)}
+.dd-item.selected{background:rgba(99,102,241,.18);border-color:var(--accent);color:#c7d2fe}
+.dd-item.used{opacity:.3;cursor:default;pointer-events:none}
+.dd-slots{display:flex;flex-direction:column;gap:10px;margin:4px 0 14px}
+.dd-slot{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1.5px dashed var(--border-md);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all var(--tr)}
+.dd-slot:hover{border-color:var(--accent)}
+.dd-slot-label{font-size:11px;font-family:var(--mono);color:var(--text-muted);white-space:nowrap;min-width:44px}
+.dd-slot-val{font-size:13px;color:var(--text);flex:1}
+.dd-slot.filled{border-style:solid;border-color:var(--border-md)}
+.dd-slot.correct{border-color:var(--green);background:rgba(16,185,129,.08)}
+.dd-slot.wrong{border-color:var(--red);background:rgba(239,68,68,.08)}
+.hs-table{width:100%;border-collapse:collapse;margin:12px 0}
+.hs-table th{background:var(--surface2);color:var(--text-muted);font-size:11px;font-family:var(--mono);padding:6px 10px;text-align:center;border:1px solid var(--border)}
+.hs-table td{padding:8px 10px;border:1px solid var(--border);font-size:13px;color:var(--text-dim)}
+.hs-table td:last-child,.hs-table td:nth-last-child(2){text-align:center;min-width:60px}
+.hs-btn{background:var(--surface2);border:1.5px solid var(--border-md);border-radius:6px;padding:4px 14px;cursor:pointer;font-size:13px;color:var(--text-dim);transition:all var(--tr)}
+.hs-btn:hover{border-color:var(--accent);color:var(--text)}
+.hs-btn.sel{background:rgba(99,102,241,.18);border-color:var(--accent);color:#c7d2fe}
+.hs-btn.correct{background:rgba(16,185,129,.15);border-color:var(--green);color:var(--green)}
+.hs-btn.wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}
+.hs-btn.reveal-correct{background:rgba(16,185,129,.08);border-color:var(--green);color:var(--green)}
+.ctrl-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.flag-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text-muted);font-size:12px;font-family:var(--mono);cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.flag-btn:hover{border-color:var(--amber-b);color:var(--amber)}
+.flag-btn.flagged{background:var(--amber-dim);border-color:var(--amber-b);color:var(--amber)}
+.nav-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.dots-wrap{overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:thin}
+.dots-nav{display:flex;gap:3px;min-width:min-content}
+.dot-q{height:5px;border-radius:3px;border:none;cursor:pointer;transition:all .18s;flex-shrink:0}
+.res-score{text-align:center;padding:1.5rem 0 1rem}
+.res-pct{font-size:64px;font-weight:600;font-family:var(--mono)}
+.res-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer}
+.res-row:last-child{border-bottom:none}
+.res-q{color:var(--text-dim);flex:1;line-height:1.5;padding-right:8px}
+.res-detail{font-size:12px;display:none;margin-top:8px;padding:10px 12px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border);line-height:1.7;color:var(--text-dim)}
+.res-detail.open{display:block}
+.mode-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--rl);background:var(--surface);cursor:pointer;transition:all var(--tr);margin-bottom:10px;text-align:left;width:100%;font-family:var(--sans)}
+.mode-card:hover{background:var(--surface2);border-color:var(--border-md)}
+.mode-icon{font-size:24px;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border-radius:var(--r);border:1px solid var(--border)}
+.mode-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.mode-desc{font-size:12px;color:var(--text-muted);line-height:1.4}
+.dq-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r)}
+.dq-label{font-size:12px;color:var(--text-dim);flex:1;line-height:1.5}
+.dq-select{background:var(--surface3);border:1.5px solid var(--border-md);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:13px;padding:6px 10px;cursor:pointer;flex-shrink:0;min-width:200px;outline:none}
+.dq-select:focus{border-color:var(--accent)}
+.dq-row.dq-correct{border-color:var(--green);background:rgba(34,197,94,.06)}
+.dq-row.dq-correct .dq-select{border-color:var(--green);color:#86efac}
+.dq-row.dq-wrong{border-color:var(--red);background:rgba(239,68,68,.06)}
+.dq-row.dq-wrong .dq-select{border-color:var(--red);color:#fca5a5}
+.code-block{font-family:var(--mono);font-size:12px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:12px;margin:10px 0;line-height:1.8;color:#94a3b8;white-space:pre-wrap}
+hr.sep{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem}
+.modal{background:var(--surface);border:1px solid var(--border-md);border-radius:var(--rl);padding:1.5rem;width:100%;max-width:420px}
+.modal h2{font-size:16px;font-weight:500;margin-bottom:8px}
+.modal p{font-size:13px;color:var(--text-dim);margin-bottom:1.25rem;line-height:1.6}
+.modal-btns{display:flex;gap:8px;flex-wrap:wrap}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:2px}
+/* ── FLASHCARD STYLES ─────────────────────────────── */
+.fc-wrap{perspective:1200px;margin-bottom:16px;cursor:pointer;min-height:200px}
+.fc-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;backface-visibility:hidden;border-radius:var(--rl);padding:1.4rem;display:flex;flex-direction:column;justify-content:flex-start;min-height:200px}
+.fc-front{background:var(--surface);border:1px solid var(--border-md)}
+.fc-back{background:var(--surface2);border:1px solid rgba(59,130,246,.35);transform:rotateY(180deg);overflow-y:auto}
+.fc-hint{font-size:11px;color:var(--text-muted);font-family:var(--mono);margin-bottom:10px;letter-spacing:.06em}
+.fc-q{font-size:14px;line-height:1.7;color:var(--text);flex:1}
+.fc-tap{font-size:11px;color:var(--text-muted);margin-top:12px;text-align:center;font-family:var(--mono)}
+.fc-ans-label{font-size:10px;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.fc-ans-body{font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:12px}
+.fc-exp-body{font-size:12px;line-height:1.75;color:var(--text-muted);border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.fc-btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.fc-knew{background:rgba(34,197,94,.12);border:1.5px solid var(--green-b);color:#86efac;border-radius:var(--r);padding:9px 18px;font-size:13px;cursor:pointer;font-family:var(--sans);transition:all var(--tr);flex:1}
+.fc-knew:hover{background:rgba(34,197,94,.22)}
+.fc-again{background:rgba(239,68,68,.1);border:1.5px solid var(--red-b);color:#fca5a5;border-radius:var(--r);padding:9px 18px;font-size:13px;cursor:pointer;font-family:var(--sans);transition:all var(--tr);flex:1}
+.fc-again:hover{background:rgba(239,68,68,.18)}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.fc-counter{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-align:center;flex:1}
+.fc-stat-bar{display:flex;gap:6px;margin-bottom:14px}
+.fc-stat{flex:1;padding:8px;border-radius:var(--r);text-align:center;font-family:var(--mono);font-size:13px;font-weight:600}
+.fc-stat-label{font-size:10px;font-weight:400;color:var(--text-muted);display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.07em}
+/* Always-visible nav for exam view */
+.nav-always{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:space-between}
+.nav-always .nav-center{flex:1;display:flex;justify-content:center;gap:6px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <span class="logo">AZ-104</span>
+    <h1>Preguntas Difíciles</h1>
+  </div>
+  <div id="vh"></div>
+  <div id="ve" class="hidden"></div>
+  <div id="vr" class="hidden"></div>
+  <div id="vfc" class="hidden"></div>
+  <div id="modal-area"></div>
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// QUESTION BANK — 46 preguntas difíciles extraídas de fotos
+// ═══════════════════════════════════════════════════════════════
+const QB=[
+// ── dd type: items=pool, ans=ordered correct strings ──────────
+{id:1,type:'dd',cat:'Automation & Config',
+q:'You need to use Azure Automation State Configuration to manage the ongoing consistency of the virtual machine configurations. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Assign tags to the virtual machines','Create a management group','Upload a configuration to Azure Automation State Configuration','Compile a configuration into a node configuration','Check the compliance status of the node'],
+ans:['Upload a configuration to Azure Automation State Configuration','Compile a configuration into a node configuration','Check the compliance status of the node'],
+exp:'<strong>Azure Automation DSC — flujo correcto:</strong><br><br>✅ <strong>1. Subir la configuración</strong> — El script DSC en PowerShell define el estado deseado de los nodos y se sube a Azure Automation como recurso de configuración.<br>✅ <strong>2. Compilar en configuración de nodo</strong> — La configuración se compila en un documento MOF que el agente LCM de Windows puede aplicar en cada VM.<br>✅ <strong>3. Comprobar cumplimiento</strong> — Azure Automation verifica periódicamente si los nodos cumplen el estado deseado e informa Compliant / Non-Compliant.<br><br>❌ <strong>Asignar etiquetas</strong> — Metadatos para organización y facturación; sin efecto en DSC.<br>❌ <strong>Crear management group</strong> — Organiza jerarquías de suscripciones; irrelevante para DSC.'},
+
+{id:2,type:'dd',cat:'Networking',
+q:'You have an Azure virtual network named VNet1 with address space 10.0.0.0/16 and a subnet named Subnet1 (10.0.0.1/24). You need to create a site-to-site VPN to Azure. Which <strong>four</strong> actions should you perform in sequence?',
+items:['Create a custom DNS server','Create an Azure Content Delivery Network (CDN) profile','Create a gateway subnet','Create a VPN gateway','Create a local gateway','Create a VPN connection'],
+ans:['Create a gateway subnet','Create a VPN gateway','Create a local gateway','Create a VPN connection'],
+exp:'<strong>VPN Site-to-Site — pasos en orden:</strong><br><br>✅ <strong>1. GatewaySubnet</strong> — Subred especial obligatoria (nombre: GatewaySubnet). Azure despliega en ella los componentes internos del VPN Gateway. Sin ella no es posible crear el gateway.<br>✅ <strong>2. VPN Gateway</strong> — Recurso de Azure que termina el túnel en el lado cloud. Policy-based (1 túnel) o Route-based (múltiples). Tarda 30-45 min en aprovisionar.<br>✅ <strong>3. Local Network Gateway</strong> — Representa el lado on-premises: IP pública del router/firewall local y los prefijos de red locales.<br>✅ <strong>4. VPN Connection</strong> — Enlaza ambos gateways con una PSK (Pre-Shared Key), estableciendo el túnel IPsec/IKE.<br><br>❌ <strong>DNS personalizado</strong> — Opcional; no es requisito de la VPN S2S.<br>❌ <strong>Azure CDN</strong> — Entrega de contenido; sin relación con conectividad VPN.'},
+
+{id:3,type:'dd',cat:'App Services',
+q:'You are developing an Azure web app named WebApp1 using App Service plan Plan1 (B1 tier). You need to configure WebApp1 to add additional instances when CPU usage exceeds 70% for 10 minutes. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Set the Scale mode to Scale to a specific instance count, and set the instance count','From the Tags settings blade of WebApp1, add a tag named $Scale with value Auto','From the Deployment Resources settings blade of WebApp1, add a deployment slot','From the Scale out (App Service Plan) settings blade, change the pricing tier','From the Scale out (App Service Plan) settings blade, enable autoscale','From the Scale mode, Scale based on a metric, add a rule, and set the instance limits'],
+ans:['From the Scale out (App Service Plan) settings blade, change the pricing tier','From the Scale out (App Service Plan) settings blade, enable autoscale','From the Scale mode, Scale based on a metric, add a rule, and set the instance limits'],
+exp:'<strong>Autoscale en App Service:</strong><br><br>✅ <strong>1. Cambiar plan de precios</strong> — El nivel B1 (Basic) no admite autoscale. Debes subir a S1 (Standard) como mínimo, que permite escala automática basada en métricas.<br>✅ <strong>2. Habilitar autoscale</strong> — En "Scale out" del App Service Plan, cambias de "Manual scale" a "Custom autoscale".<br>✅ <strong>3. Regla de métrica</strong> — Defines la condición: CPU > 70% durante 10 min → añadir instancia. También configuras límites mínimo, máximo y predeterminado.<br><br>❌ <strong>Scale to specific count</strong> — Escala manual fija, no automática.<br>❌ <strong>Tag $Scale=Auto</strong> — Las etiquetas no configuran autoscaling.<br>❌ <strong>Deployment slot</strong> — Para Blue/Green deployments, no para escalar.'},
+
+{id:4,type:'dd',cat:'Compute & Backup',
+q:'You have an Azure subscription with VNet1, replication policy RepPolicy1, Recovery Services vault Vault1, and Storage account Storage1. You have an AWS EC2 VM named VM1 running Windows Server 2016. You need to migrate VM1 to VNet1 using Azure Site Recovery. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Create an Azure Migrate project','Enable Windows PowerShell remoting on VM1','Deploy an EC2 virtual machine as a configuration server','Install Azure Site Recovery Unified Setup','Enable replication for VM1'],
+ans:['Deploy an EC2 virtual machine as a configuration server','Install Azure Site Recovery Unified Setup','Enable replication for VM1'],
+exp:'<strong>Migrar AWS EC2 a Azure con Azure Site Recovery:</strong><br><br>✅ <strong>1. Desplegar EC2 como servidor de configuración</strong> — Actúa de intermediario entre AWS y Azure. Se registra con el Recovery Services vault de Azure.<br>✅ <strong>2. Instalar ASR Unified Setup</strong> — En el servidor de configuración: incluye Process Server y Master Target Server.<br>✅ <strong>3. Habilitar replicación de VM1</strong> — Inicia la replicación. El Mobility Service se instala automáticamente en VM1 via push.<br><br>❌ <strong>Azure Migrate</strong> — Herramienta de evaluación y descubrimiento; ASR es la que replica/migra activamente.<br>❌ <strong>PowerShell Remoting</strong> — No lo requiere ASR para migración desde AWS.'},
+
+{id:5,type:'dd',cat:'Compute & Backup',
+q:'You create an Azure Migrate project named TestMig in resource group test-migration. You need to discover which on-premises virtual machines to assess for migration. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Create a migration group in the project','Create an assessment in the project','Download the OVA file for the collector appliance','Create a collector virtual machine','Configure the collector and start discovery'],
+ans:['Download the OVA file for the collector appliance','Create a collector virtual machine','Configure the collector and start discovery'],
+exp:'<strong>Azure Migrate — proceso de descubrimiento on-premises:</strong><br><br>✅ <strong>1. Descargar OVA</strong> — El appliance se distribuye como archivo OVA desde el portal de Azure en el proyecto de Migrate.<br>✅ <strong>2. Crear VM recolectora</strong> — Importas el OVA en VMware y lo despliegas como VM en el entorno on-premises.<br>✅ <strong>3. Configurar y comenzar descubrimiento</strong> — Introduces credenciales de vCenter y la clave del proyecto. Inicia el escaneo y envía datos a Azure.<br><br>❌ <strong>Crear grupo de migración</strong> — Se hace <em>después</em> del descubrimiento para agrupar VMs relacionadas.<br>❌ <strong>Crear assessment</strong> — También posterior: sin datos de descubrimiento, no hay nada que evaluar.'},
+
+{id:6,type:'dd',cat:'Storage',
+q:'You have an Azure subscription with an Azure file share. You have an on-premises server Server1 running Windows Server 2016. You plan to set up Azure File Sync. Which <strong>two</strong> actions should you perform in the Azure subscription?',
+items:['Install the Azure File Sync Agent','Run Server Registration','Create a Storage Sync Service','Create a sync group'],
+ans:['Create a Storage Sync Service','Create a sync group'],
+exp:'<strong>Azure File Sync — acciones en la suscripción de Azure:</strong><br><br>✅ <strong>1. Storage Sync Service</strong> — Recurso raíz de Azure File Sync. Contenedor de todos los servidores registrados y sync groups.<br>✅ <strong>2. Sync Group</strong> — Define el conjunto de archivos a sincronizar: cloud endpoint (Azure file share) + server endpoints (carpetas on-premises).<br><br>❌ <strong>Instalar agente AFS</strong> — Se instala en Server1 (on-premises), no es una acción en Azure.<br>❌ <strong>Server Registration</strong> — También ocurre en Server1; conecta el servidor con el Storage Sync Service. No es acción en Azure.'},
+
+{id:7,type:'dd',cat:'Compute & Backup',
+q:'Files were accidentally deleted from an Azure VM protected by Azure Backup. Which <strong>four</strong> actions should you perform in sequence to restore individual files?',
+items:['From the Azure portal, click Restore VM from the vault','Mount a VHD','Copy the files by using AZCopy','From the Azure portal, click File Recovery from the vault','Select a restore point that contains the deleted files','Download and run the script to mount a drive on the local computer','Copy the files by using File Explorer'],
+ans:['From the Azure portal, click File Recovery from the vault','Select a restore point that contains the deleted files','Download and run the script to mount a drive on the local computer','Copy the files by using File Explorer'],
+exp:'<strong>Recuperación de ficheros individuales con Azure Backup:</strong><br><br>✅ <strong>1. File Recovery</strong> — En el Recovery Services vault → File Recovery (no "Restore VM"). Monta el disco de backup sin restaurar la VM completa.<br>✅ <strong>2. Seleccionar restore point</strong> — Elige el snapshot previo al borrado accidental.<br>✅ <strong>3. Descargar y ejecutar script</strong> — Azure genera un script que conecta vía iSCSI y monta el backup como unidad de disco local.<br>✅ <strong>4. Copiar con Explorador</strong> — Navegas a la unidad montada y copias los archivos.<br><br>❌ <strong>Restore VM</strong> — Restaura la VM completa; destructivo y lento para recuperar solo ficheros.<br>❌ <strong>Mount VHD</strong> — No es el procedimiento de Azure Backup.<br>❌ <strong>AZCopy</strong> — Herramienta para transferencias hacia Azure Storage, no para backups.'},
+
+// ── hs type: statements array, ans array of "Yes"/"No" ────────
+{id:8,type:'hs',cat:'Networking',
+q:'<strong>Subscription1</strong> contains virtual networks with subnets: Subnet11 (10.10.10.0/24, VNETA), Subnet21 (172.16.0.0/18, VNET1), Subnet22 (172.16.128.0/18, VNET2). <strong>Subscription2</strong> contains VNETA (address space: 10.10.128.0/17, Canada Central) with SubnetA1 (10.10.130.0/24) and SubnetA2 (10.10.131.0/24).<br><br>For each statement, select Yes if true, otherwise No.',
+statements:['A Site-to-Site connection can be established between VNET1 and VNET2.','VNET1 and VNET2 can be peered.','VNET1 and VNETA can be peered.'],
+ans:['No','Yes','Yes'],
+exp:'<strong>VNets: S2S VPN vs Peering — análisis de espacios de dirección:</strong><br><br><em>VNET1=172.16.0.0/18 · VNET2=172.16.128.0/18 · VNETA(Sub2)=10.10.128.0/17</em><br><br>❌ <strong>S2S VNET1↔VNET2: NO</strong> — Una VPN Site-to-Site requiere GatewaySubnet y VPN Gateway en cada VNet. El escenario no menciona Gateway Subnets en VNET1 ni VNET2; sin ellas es imposible crear el gateway y, por tanto, el túnel VPN.<br><br>✅ <strong>Peering VNET1↔VNET2: SÍ</strong> — 172.16.0.0/18 (hasta 172.16.63.255) y 172.16.128.0/18 no se solapan. El peering no requiere Gateway Subnet y funciona entre suscripciones.<br><br>✅ <strong>Peering VNET1↔VNETA: SÍ</strong> — 172.16.0.0/18 y 10.10.128.0/17 son rangos totalmente distintos. El peering entre suscripciones distintas está plenamente soportado en Azure.'},
+
+{id:9,type:'hs',cat:'Networking',
+q:'You have an Azure subscription with virtual networks: VNET1 (West US), VNET2 (West US), VNET3 (East US). Private DNS zones: Zone1.com (linked to VNET1 via Link1, auto-registration: Yes), Zone2.com (linked to VNET2 via Link2, auto-registration: No), Zone3.com (linked to VNET3 via Link3, auto-registration: No).<br><br>For each statement, select Yes if true, otherwise No.',
+statements:['You can enable auto registration for Link2.','You can add a virtual network link for VNET1 to Zone3.com.','You can add a virtual network link for VNET2 to Zone1.com and enable auto registration.'],
+ans:['Yes','Yes','No'],
+exp:'<strong>Private DNS Zones — auto-registration y links:</strong><br><br>✅ <strong>Habilitar auto-reg en Link2: SÍ</strong> — La auto-registration es configurable por enlace de forma independiente. Link2 (VNET2→Zone2, auto-reg: No) puede cambiarse a Sí.<br><br>✅ <strong>Link VNET1 a Zone3: SÍ</strong> — Las zonas DNS privadas pueden vincularse a VNets de cualquier región. No existe restricción geográfica para los virtual network links.<br><br>❌ <strong>Link VNET2 a Zone1 con auto-reg: NO</strong> — Restricción clave: <em>cada VNet solo puede tener auto-registration en UNA zona DNS privada</em>. VNET1 ya es VNet de registro en Zone1. Si VNET2 se añade como registro en Zone1 también, se viola el límite. Cada zona admite máximo una VNet de registro activa por VNet.'},
+
+// ── dd continued ───────────────────────────────────────────────
+{id:10,type:'dd',cat:'Networking',
+q:'You have: vm1 (Virtual Machine with a basic public IP address), ng1 (NSG), lb1 (Azure Standard Load Balancer). You need to use lb1 to load balance HTTPS connections to vm1 and vm2. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Remove ng1','Create an availability set','Remove the public IP addresses','Create a backend pool on lb1','Create a load balancing rule on lb1'],
+ans:['Remove the public IP addresses','Create a backend pool on lb1','Create a load balancing rule on lb1'],
+exp:'<strong>Standard Load Balancer + IPs públicas básicas — incompatibilidad:</strong><br><br>✅ <strong>1. Eliminar IPs públicas básicas</strong> — Azure Standard LB es <em>incompatible</em> con VMs que tienen IPs públicas de SKU Basic. Debes retirarlas antes de añadir las VMs al backend pool.<br>✅ <strong>2. Crear backend pool</strong> — Añades las NICs de vm1 y vm2. Con las IPs públicas eliminadas, las VMs solo son accesibles vía el balanceador.<br>✅ <strong>3. Crear la regla de balanceo</strong> — Puerto 443 (HTTPS), con health probe correspondiente.<br><br>❌ <strong>Eliminar ng1 (NSG)</strong> — El NSG no interfiere con la configuración del LB; no hay que eliminarlo.<br>❌ <strong>Availability set</strong> — Mejora la alta disponibilidad pero no es requisito para el LB.'},
+
+{id:11,type:'dd',cat:'Networking',
+q:'You have an Azure subscription with two on-premises locations: site1 and site2. You need to connect site1 and site2 using Azure Virtual WAN. Which <strong>four</strong> actions should you perform in sequence?',
+items:['Connect the virtual networks to the hub','Create a Virtual WAN resource','Create a virtual hub','Create VPN sites','Connect the VPN sites to the hub'],
+ans:['Create a Virtual WAN resource','Create a virtual hub','Create VPN sites','Connect the VPN sites to the hub'],
+exp:'<strong>Azure Virtual WAN — orden de configuración:</strong><br><br>✅ <strong>1. Crear recurso Virtual WAN</strong> — Recurso raíz que agrupa toda la conectividad (tipo Basic o Standard).<br>✅ <strong>2. Crear hub virtual</strong> — Punto central de tránsito regional. Gestiona el enrutamiento entre VNets, VPN sites y ExpressRoute conectados.<br>✅ <strong>3. Crear VPN sites</strong> — Cada site representa una ubicación on-premises con la IP pública del dispositivo VPN y los prefijos de red locales.<br>✅ <strong>4. Conectar VPN sites al hub</strong> — Establecen los túneles IPsec. Azure genera la configuración VPN descargable para el dispositivo on-premises.<br><br>❌ <strong>Conectar VNets al hub</strong> — Paso válido pero posterior, y no necesario para la conectividad site-a-site.'},
+
+// ── dropq type: dropdowns with known correct answers ───────────
+{id:12,type:'dropq',cat:'Monitor & Alerts',
+q:'You need to create a bar chart that shows the number of distinct computers that have sent heartbeats each week. How should you complete the Log Analytics query?<div class="code-block">Heartbeat\n| where TimeGenerated >= startofweek(ago(21d))\n| [BLANK_1] (Computer) by endofweek(TimeGenerated)\n| render [BLANK_2] kind=default</div>',
+dropdowns:[
+  {label:'[BLANK_1] — Select the correct KQL operator:',options:['extend','project','render','summarize'],ans:3},
+  {label:'[BLANK_2] — Select the correct chart type:',options:['count','dcount','min','max'],ans:1}
+],
+exp:'<strong>KQL — summarize + dcount para conteo de equipos únicos por semana:</strong><br><br>✅ <strong>Blank 1: summarize</strong> — Agrega filas y calcula estadísticas por grupo. Es el único operador que permite calcular métricas agrupando por período temporal.<br>✅ <strong>Blank 2: dcount</strong> — Cuenta valores <em>distintos</em>. <code>dcount(Computer)</code> da el número de equipos únicos que enviaron heartbeat en cada semana, no el número total de filas.<br><br>❌ <strong>extend</strong> — Añade columnas calculadas sin agregar filas; no sirve para conteos grupales.<br>❌ <strong>project</strong> — Selecciona columnas; no realiza agregaciones.<br>❌ <strong>render</strong> — Visualiza resultados; no es operador de cálculo y no precede a dcount.<br>❌ <strong>count</strong> — Cuenta todas las filas incluyendo duplicados. Un mismo equipo con 50 heartbeats daría 50, no 1.<br>❌ <strong>min/max</strong> — Valor mínimo o máximo; no sirven para contar equipos únicos.'},
+
+// ── dd continued ───────────────────────────────────────────────
+{id:13,type:'dd',cat:'Networking',
+q:'You have an Azure subscription with a virtual network named VNG1 that uses policy-based routing and has a single Site-to-Site VPN connection. The solution must add a Site-to-Site VPN as a backup connection. Which <strong>four</strong> actions should you perform in sequence?',
+items:['Create a policy-based VPN gateway in a subnet of /27','Delete the existing policy-based VPN gateway','Create a route-based VPN gateway in a subnet of /27','Create a new GatewaySubnet','Create the additional VPN connection'],
+ans:['Delete the existing policy-based VPN gateway','Create a new GatewaySubnet','Create a route-based VPN gateway in a subnet of /27','Create the additional VPN connection'],
+exp:'<strong>Migrar de gateway Policy-based a Route-based para múltiples conexiones:</strong><br><br>✅ <strong>1. Eliminar el gateway Policy-based</strong> — Los gateways Policy-based solo admiten <em>un único túnel VPN</em>. Para añadir backup S2S debes reemplazarlo.<br>✅ <strong>2. Crear nuevo GatewaySubnet (/27)</strong> — El subnet debe tener al menos /27 para compatibilidad con gateways futuros.<br>✅ <strong>3. Crear gateway Route-based</strong> — Los Route-based admiten múltiples conexiones S2S simultáneas, P2S y coexistencia con ExpressRoute.<br>✅ <strong>4. Crear la nueva VPN connection</strong> — Añades la segunda conexión como backup al nuevo gateway.<br><br>❌ <strong>Policy-based nuevo</strong> — Seguirías limitado a 1 túnel; no resuelve el problema.'},
+
+// ── mc type ────────────────────────────────────────────────────
+{id:14,type:'mc',cat:'Networking',
+q:'Your team is creating a CDN profile and endpoint for an application. The endpoint points to Azure Blob storage. Content must be served using the URL https://www.lead2pass.com/Azure. Which of the following steps would you perform? (Choose <strong>3</strong>)',
+opts:['Register the URL https://www.lead2pass.com in Azure DNS','Associate the custom domain with your CDN endpoint','Create a CNAME DNS record pointing to the CDN endpoint','Modify the CDN endpoint domain name','Verify the custom domain'],
+ans:[1,2,4],
+exp:'<strong>Dominio personalizado en Azure CDN — tres pasos:</strong><br><br>✅ <strong>B. Asociar dominio al endpoint</strong> — En el CDN endpoint añades el dominio personalizado (www.lead2pass.com). Azure inicia el proceso de verificación.<br>✅ <strong>C. Crear CNAME en el DNS</strong> — En tu proveedor DNS creas un CNAME que apunta tu dominio al hostname del endpoint CDN (*.azureedge.net). Permite a Azure verificar la propiedad.<br>✅ <strong>E. Verificar el dominio</strong> — Azure confirma el CNAME y activa el dominio personalizado.<br><br>❌ <strong>A. Registrar en Azure DNS</strong> — Puedes usar cualquier proveedor DNS. Azure DNS es opcional, no obligatorio.<br>❌ <strong>D. Modificar nombre del endpoint</strong> — El endpoint tiene su propio hostname *.azureedge.net que no se modifica; el dominio es un alias.'},
+
+// ── dd continued ───────────────────────────────────────────────
+{id:15,type:'dd',cat:'Compute & Backup',
+q:'You have a VM named VM1 with OS disk Disk1 and data disk Disk2. You need to back up Disk2 using Azure Backup. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Create a Recovery Services vault','Delegate permissions for the vault','Create an Azure Backup vault','Create a backup policy and configure the backup','Configure a managed identity'],
+ans:['Create an Azure Backup vault','Create a backup policy and configure the backup','Configure a managed identity'],
+exp:'<strong>Azure Disk Backup para discos gestionados (≠ Recovery Services vault):</strong><br><br>✅ <strong>1. Crear Azure Backup vault</strong> — El backup de discos gestionados usa el <em>Azure Backup vault</em>, NO el Recovery Services vault. Son recursos diferentes: el Backup vault está optimizado para discos y blobs.<br>✅ <strong>2. Política de backup y configurar el backup</strong> — Defines frecuencia y retención, y la asignas a Disk2.<br>✅ <strong>3. Configurar identidad administrada</strong> — El vault necesita una Managed Identity con permisos RBAC sobre el disco para leer y crear snapshots.<br><br>❌ <strong>Recovery Services vault</strong> — Sirve para VMs completas, SQL, Azure Files y Site Recovery, pero <em>no</em> para discos gestionados individuales.<br>❌ <strong>Delegar permisos</strong> — El paso correcto es configurar la identidad administrada del vault.'},
+
+{id:16,type:'dd',cat:'Compute & Backup',
+q:'You have a virtual machine named VM1. You need to back up VM1 and ensure that backups are stored across three availability zones in the primary region. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Configure a replication policy','Set replication to Locally-redundant storage (LRS)','Create a Recovery Services vault','Set replication to Zone-redundant storage (ZRS)','For VM1, create a backup policy and configure the backup'],
+ans:['Create a Recovery Services vault','Set replication to Zone-redundant storage (ZRS)','For VM1, create a backup policy and configure the backup'],
+exp:'<strong>Backup de VM con redundancia de zona (ZRS):</strong><br><br>✅ <strong>1. Crear Recovery Services vault</strong> — Contenedor de todos los datos de backup.<br>✅ <strong>2. Establecer replicación ZRS</strong> — En Propiedades del vault → Configuración de Backup → cambia a Zone-Redundant Storage. Distribuye los backups entre las 3 zonas de disponibilidad de la región primaria.<br>✅ <strong>3. Configurar backup de VM1</strong> — Defines frecuencia, hora y retención, y asocias VM1 al vault.<br><br>❌ <strong>LRS</strong> — Replica 3 veces en un solo datacenter; sin protección ante fallos de zona.<br>❌ <strong>Replication policy</strong> — Término de Azure Site Recovery, no de Azure Backup.'},
+
+// ── mc ─────────────────────────────────────────────────────────
+{id:17,type:'mc',cat:'Storage',
+q:'You have a storage account named contoso2023. You need to grant users access to the storage account and enable geographic redundancy. Which <strong>two</strong> settings should you configure? (Select 2)',
+opts:['Diagnose and solve problems','Access Control (IAM)','Data migration','Events','Geo-replication','Static website'],
+ans:[1,4],
+exp:'<strong>Acceso de usuarios y geo-replicación en una storage account:</strong><br><br>✅ <strong>B. Access Control (IAM)</strong> — Asigna roles RBAC (Storage Blob Data Reader, Contributor, etc.) a usuarios y grupos. Sin IAM los usuarios no tienen permisos sobre la cuenta.<br>✅ <strong>F. Geo-replication</strong> — Configura GRS o RA-GRS para replicar datos a la región emparejada, garantizando durabilidad geográfica.<br><br>❌ Las demás opciones (Diagnostics, Events, Data migration, Storage browser, Data protection, Object replication, Blob inventory, Static website, Lifecycle management) gestionan otros aspectos pero ninguna concede acceso a usuarios ni configura la redundancia geográfica principal.'},
+
+// ── dropq ──────────────────────────────────────────────────────
+{id:18,type:'dropq',cat:'Storage',
+q:'You have an Azure subscription with the storage account shown. <strong>container1</strong> has: two Stored access policies (Policy1, Policy2) and one Immutable blob storage policy (Time-based retention: 14 days, Scope: Container). Use the drop-down menus to complete each statement.',
+dropdowns:[
+  {label:'The maximum number of additional stored access policies you can create for container1 is:',options:['0','1','2','3','4'],ans:3},
+  {label:'The maximum number of additional immutable blob storage policies you can create for container1 is:',options:['0','1','2','3','4'],ans:1}
+],
+exp:'<strong>Límites de políticas en contenedores blob:</strong><br><br>✅ <strong>Stored access policies adicionales: 3</strong> — Máximo permitido: <strong>5</strong> por contenedor. Ya existen 2 (Policy1, Policy2). Pueden añadirse 3 más (5–2=3).<br><br>✅ <strong>Immutable blob policies adicionales: 1</strong> — Pueden coexistir exactamente <strong>2 tipos</strong>: Time-based retention (ya existe, 14 días) y Legal hold. Solo puede añadirse 1 más.<br><br>❌ <strong>4 stored access adicionales</strong> — El límite es 5 en total, no ilimitado.<br>❌ <strong>0 inmutabilidad adicional</strong> — Sí puede añadirse una Legal hold aunque ya exista Time-based retention.<br>❌ <strong>2+ políticas de inmutabilidad</strong> — El máximo son 2 en total (1 time-based + 1 legal hold).'},
+
+{id:19,type:'dropq',cat:'Storage',
+q:'You have an Azure subscription with the following storage accounts: storage1 (StorageV2, GZRS), storage2 (BlobStorage, RA-GRS), storage3 (BlockBlobStorage, ZRS). Identify which support lifecycle management and which support the Archive access tier.',
+dropdowns:[
+  {label:'Lifecycle management is supported by:',options:['storage1 only','storage2 only','storage1 and storage2 only','storage1, storage2, and storage3'],ans:3},
+  {label:'The Archive access tier is supported by:',options:['storage1 only','storage2 only','storage1 and storage2 only','storage1, storage2, and storage3'],ans:1}
+],
+exp:'<strong>Lifecycle management y Archive tier — compatibilidad por cuenta:</strong><br><br>✅ <strong>Lifecycle management: storage1, storage2 y storage3</strong> — Compatible con StorageV2 (storage1), BlobStorage (storage2) y BlockBlobStorage (storage3). Los tres tipos la soportan.<br><br>✅ <strong>Archive tier: solo storage2</strong> — Archive NO está disponible con replicación ZRS o GZRS. storage1 usa GZRS y storage3 usa ZRS → ambas excluidas. Solo storage2 (BlobStorage/RA-GRS) cumple los requisitos.<br><br>❌ <strong>Lifecycle solo en storage1 o storage2</strong> — BlockBlobStorage (storage3) también soporta lifecycle management.<br>❌ <strong>Archive en storage1 o los tres</strong> — GZRS (storage1) y ZRS (storage3) son incompatibles con Archive porque requiere LRS, GRS o RA-GRS.'},
+
+{id:20,type:'dropq',cat:'Storage',
+q:'You have an Azure Storage account named storage1 that uses Azure Blob storage and Azure File storage. You need to use AzCopy to copy data to each type of storage. Which authentication method should you use for each type?',
+dropdowns:[
+  {label:'Blob storage authentication method:',options:['Azure AD only','Shared access signatures (SAS) only','Azure AD and shared access signatures (SAS)'],ans:2},
+  {label:'File storage authentication method:',options:['Azure AD only','Shared access signatures (SAS) only','Azure AD and shared access signatures (SAS)'],ans:1}
+],
+exp:'<strong>AzCopy — autenticación según tipo de almacenamiento:</strong><br><br>✅ <strong>Blob Storage: Azure AD y SAS</strong> — AzCopy soporta ambos métodos para Blob. Azure AD (<code>azcopy login</code>) es el recomendado. Las SAS tokens también son válidas.<br><br>✅ <strong>File Storage: solo SAS</strong> — Limitación importante: <em>Azure AD no está soportado en AzCopy para Azure Files</em>. Solo las SAS tokens funcionan.<br><br>❌ <strong>Solo Azure AD para Blob</strong> — Acepta ambos (AD y SAS); no es exclusivo de AD.<br>❌ <strong>Azure AD para Files</strong> — AzCopy no implementa autenticación AD para Azure Files (distinto del montaje SMB que sí soporta Kerberos).'},
+
+{id:21,type:'dropq',cat:'Compute & Backup',
+q:'You have an Azure subscription with container images: Image1 (Windows Server OS), Image2 (Linux OS). You plan to use the following services: Azure Container Instances, Azure Container Apps, Azure App Service. In which services can you run each image?',
+dropdowns:[
+  {label:'Image1 (Windows Server) can run in:',options:['Azure Container Instances only','Azure Container Apps only','Azure Container Instances and App Services only','Azure Container Apps and App Services only','Azure Container Instances, Azure Container Apps, and App Services'],ans:4},
+  {label:'Image2 (Linux) can run in:',options:['Azure Container Instances only','Azure Container Apps only','Azure Container Instances and App Services only','Azure Container Apps and App Services only','Azure Container Instances, Azure Container Apps, and App Services'],ans:4}
+],
+exp:'<strong>Contenedores en Azure — compatibilidad por sistema operativo:</strong><br><br>✅ <strong>Image1 (Windows Server): los tres servicios</strong> — Azure Container Instances, Container Apps y App Service soportan contenedores Windows.<br><br>✅ <strong>Image2 (Linux): los tres servicios</strong> — Linux es el SO más ampliamente compatible. Los tres servicios lo soportan plenamente.<br><br>❌ <strong>Solo ACI o solo App Service</strong> — Todos los servicios soportan ambos sistemas. En el examen AZ-104 se consideran los tres compatibles con Windows y Linux.<br><em>Nota práctica:</em> Azure Container Apps tiene soporte de Windows más limitado en entornos de producción, pero el examen lo trata como compatible.'},
+
+// ── dd continued ───────────────────────────────────────────────
+{id:22,type:'dd',cat:'Identity & Access',
+q:'You have a Microsoft Entra tenant. You need to ensure that when a new Microsoft 365 group is created, the group name is automatically formatted as: <strong>&lt;Department&gt;&lt;Group name&gt;</strong>. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Set Add suffix to Attribute','Set Add suffix to String','Set Add prefix to String','Customize the company branding','Create a group naming policy','Set Add prefix to Attribute','Set Select type to Department'],
+ans:['Create a group naming policy','Set Add prefix to Attribute','Set Select type to Department'],
+exp:'<strong>Directiva de nomenclatura para grupos de Microsoft 365:</strong><br><br>✅ <strong>1. Crear directiva de nomenclatura</strong> — En Entra admin center → Grupos → Configuración → Naming Policy. Define la regla aplicada automáticamente a grupos nuevos.<br>✅ <strong>2. Add prefix → Attribute</strong> — Tipo "Attribute" (valor dinámico del directorio), no "String" (texto fijo). Con String, todos los grupos tendrían el prefijo literal "Department".<br>✅ <strong>3. Seleccionar tipo: Department</strong> — Azure Entra lee el campo "Department" del perfil del creador y lo antepone automáticamente.<br><br>❌ <strong>Add prefix to String</strong> — Pondría el texto literal "Department" en todos los grupos, no el valor real del departamento del usuario.<br>❌ <strong>Add suffix</strong> — Va al final del nombre; el requisito es un <em>prefijo</em>.<br>❌ <strong>Company branding</strong> — Configura logos y colores de la pantalla de login; irrelevante para nomenclatura de grupos.'},
+
+{id:23,type:'dd',cat:'Networking',
+q:'You have an Azure subscription with a virtual network VNet1. Several users plan to work remotely from home and connect to VMs in VNet1 via Remote Desktop. You need to configure Point-to-Site (P2S) VPN connectivity for each user. Which <strong>three</strong> actions should you perform in sequence?',
+items:['Add a public IP address to each virtual machine','Deploy a load balancer to VNet1','Create a local network gateway','Create a new subnet in VNet1','Add a VPN client address pool','Create a VPN gateway'],
+ans:['Create a new subnet in VNet1','Add a VPN client address pool','Create a VPN gateway'],
+exp:'<strong>VPN Point-to-Site para usuarios remotos:</strong><br><br>✅ <strong>1. Crear GatewaySubnet en VNet1</strong> — Subred dedicada llamada obligatoriamente GatewaySubnet. El VPN Gateway se despliega en ella.<br>✅ <strong>2. Añadir pool de direcciones VPN</strong> — Rango de IPs asignadas a los clientes remotos al conectarse. No debe solapar con VNet1 ni la red on-premises.<br>✅ <strong>3. Crear VPN Gateway</strong> — Tipo Route-based, gestiona las conexiones P2S. Se configura el método de autenticación (certificados, RADIUS o Azure AD).<br><br>❌ <strong>Local Network Gateway</strong> — Solo para VPN S2S (representa la red on-premises). En P2S no existe porque los clientes son usuarios individuales.<br>❌ <strong>Load Balancer</strong> — No tiene rol en conectividad P2S.<br>❌ <strong>IP pública por VM</strong> — Con P2S los usuarios acceden por IP privada; las IPs públicas en las VMs son innecesarias.'},
+
+{id:24,type:'dd',cat:'Monitor & Alerts',
+q:'You need to set up an Azure Monitor alert rule to track availability for a virtual machine. Arrange the following steps in the correct sequence.',
+items:['Select the target resource (the VM)','Navigate to Azure Monitor and select Alerts','Click "New alert rule"','Configure the signal and condition (e.g., VM availability < 1)','Create or assign an action group','Review and create the alert rule'],
+ans:['Navigate to Azure Monitor and select Alerts','Click "New alert rule"','Select the target resource (the VM)','Configure the signal and condition (e.g., VM availability < 1)','Create or assign an action group','Review and create the alert rule'],
+exp:'<strong>Configurar alerta en Azure Monitor — flujo completo:</strong><br><br>✅ <strong>1. Azure Monitor → Alertas</strong> — Punto de entrada centralizado para todas las alertas.<br>✅ <strong>2. Nueva regla de alerta</strong> — Abre el asistente de creación.<br>✅ <strong>3. Seleccionar recurso objetivo (la VM)</strong> — Define el alcance: suscripción, grupo de recursos y recurso concreto.<br>✅ <strong>4. Configurar señal y condición</strong> — Métrica (ej. VM Availability), operador y umbral, granularidad temporal.<br>✅ <strong>5. Action group</strong> — Define qué ocurre al dispararse: email, SMS, webhook, Azure Function, Logic App.<br>✅ <strong>6. Revisar y crear</strong> — Valida la configuración y confirma.<br><br><em>El orden importa:</em> Sin seleccionar el recurso primero no sabes qué métricas están disponibles. El action group se configura después de la condición.'},
+
+{id:25,type:'dd',cat:'Storage',
+q:'You are configuring Microsoft Entra Domain Services authentication for Azure Files in a hybrid environment. Your organization uses Microsoft Entra Connect to sync Active Directory. Arrange the steps in the correct order to enable identity-based access to Azure Files.',
+items:['Configure directory and file-level NTFS permissions','Enable Azure AD Kerberos authentication on the storage account','Grant share-level permissions using Azure RBAC','Enable identity-based directory access on the storage account','Join or sync client machines to Microsoft Entra Domain Services'],
+ans:['Enable identity-based directory access on the storage account','Enable Azure AD Kerberos authentication on the storage account','Grant share-level permissions using Azure RBAC','Join or sync client machines to Microsoft Entra Domain Services','Configure directory and file-level NTFS permissions'],
+exp:'<strong>Autenticación basada en identidad para Azure Files (Kerberos + Entra DS):</strong><br><br>✅ <strong>1. Habilitar acceso de directorio en la storage account</strong> — Activa "Identity-based directory access". Indica a Azure Files que usará un proveedor de identidad.<br>✅ <strong>2. Habilitar Azure AD Kerberos</strong> — Configura el protocolo Kerberos para que los clientes obtengan tickets de Azure AD al acceder al file share.<br>✅ <strong>3. Permisos de share con RBAC</strong> — Asignas roles (Storage File Data SMB Share Reader/Contributor) a usuarios o grupos.<br>✅ <strong>4. Unir/sincronizar máquinas</strong> — Las VMs deben estar unidas a Entra DS o sincronizadas para recibir tickets Kerberos.<br>✅ <strong>5. Permisos NTFS</strong> — Permisos de directorio/archivo dentro del share (icacls, Propiedades de carpeta). Son el último paso porque requieren montar el share.<br><br><em>El orden importa:</em> No puedes configurar Kerberos antes de activar el acceso de directorio.'},
+
+// ── mc continued ───────────────────────────────────────────────
+{id:26,type:'mc',cat:'Storage',
+q:'You are managing an Azure Storage account configured with container soft delete. Which of the following statements about soft-deleted containers are correct? (Select <strong>2</strong>)',
+opts:['A soft-deleted container can only be restored to a different name to avoid conflicts','Locking the retention period affects only containers deleted after the change is made','Soft-deleted containers support the same operations as active containers','A soft-deleted container remains visible in the Azure portal after the retention period is updated'],
+ans:[1,3],
+exp:'<strong>Contenedores con soft delete — comportamiento correcto:</strong><br><br>✅ <strong>B. Cambios en retención afectan solo a eliminaciones futuras</strong> — Correcto. Modificar la configuración de retención no es retroactivo: los contenedores ya eliminados mantienen el período vigente en el momento de su borrado.<br>✅ <strong>D. Contenedores soft-deleted visibles en portal tras cambiar retención</strong> — Correcto. Se ven en el portal con estado "Deleted" mientras estén en período de retención, independientemente de cambios posteriores.<br><br>❌ <strong>A. Solo restaurar con nombre diferente</strong> — Falso. Puede restaurarse con el mismo nombre original si no existe un contenedor activo con ese nombre.<br>❌ <strong>C. Mismas operaciones que contenedores activos</strong> — Falso. Los contenedores eliminados solo permiten la operación de restauración.'},
+
+{id:27,type:'dd',cat:'Compute & Backup',
+q:'You are managing a virtual machine "myVM" using Azure Disk Encryption tied to an Azure Key Vault. You need to move this VM to a different resource group using the Azure CLI. Arrange the steps in the correct order.',
+items:['az vm deallocate --name myVM --resource-group sourceRG','az group create --name destRG --location westeurope','az vm move --ids [vmResourceId] --destination-group destRG','az vm start --name myVM --resource-group destRG'],
+ans:['az group create --name destRG --location westeurope','az vm deallocate --name myVM --resource-group sourceRG','az vm move --ids [vmResourceId] --destination-group destRG','az vm start --name myVM --resource-group destRG'],
+exp:'<strong>Mover VM con Azure Disk Encryption (ADE) usando CLI:</strong><br><br>✅ <strong>1. Crear grupo de recursos destino</strong> — El destino debe existir antes de mover. <code>az group create</code> lo crea en la nueva ubicación/región.<br>✅ <strong>2. Desasignar la VM</strong> — La VM debe estar parada y desasignada (<em>no solo apagada</em>). <code>az vm deallocate</code> garantiza estado seguro para el movimiento.<br>✅ <strong>3. Mover la VM</strong> — <code>az resource move</code> traslada la VM y recursos asociados (discos, NIC). El Key Vault referenciado por ADE debe ser accesible.<br>✅ <strong>4. Iniciar la VM</strong> — Arrancas la VM en el nuevo grupo. Azure desbloquea los discos usando las claves del Key Vault.<br><br>❌ <strong>Iniciar antes de mover</strong> — Mover una VM en ejecución causa errores de consistencia.<br><em>Nota:</em> Tras el movimiento puede ser necesario actualizar políticas de acceso del Key Vault.'},
+
+// ── mc ─────────────────────────────────────────────────────────
+{id:28,type:'mc',cat:'Networking',
+q:'Which Azure Private Link component provides a network interface in the <strong>consumer\'s</strong> virtual network with a private IP address, enabling private connectivity to a service?',
+opts:['Private Endpoint','Private Link Service','Azure Standard Load Balancer','Service Endpoint'],
+ans:[0],
+exp:'<strong>Azure Private Link — componentes del ecosistema:</strong><br><br>✅ <strong>A. Private Endpoint</strong> — Interfaz de red en la VNet del consumidor con IP privada del espacio de la VNet. Conecta privadamente a un servicio sin pasar por internet.<br><br>❌ <strong>Private Link Service</strong> — Componente del <em>proveedor</em> (lado del servicio), no del consumidor. Expone tu propio servicio para consumo privado por otros.<br>❌ <strong>Standard Load Balancer</strong> — Infraestructura <em>requerida</em> para exponer un Private Link Service; no es la interfaz de red privada del consumidor.<br>❌ <strong>Service Endpoint</strong> — Extiende la identidad de la VNet al servicio pero el tráfico usa IPs públicas del servicio. No crea IP privada en la VNet ni usa Private Link.'},
+
+{id:29,type:'mc',cat:'Compute & Backup',
+q:'You manage Azure VMs encrypted with Azure Disk Encryption (ADE), with encryption keys in Azure Key Vault. You have Azure Backup configured. You need to restore a VM from a recent backup. Which statements are correct? (Select <strong>3</strong>)',
+opts:['The encryption keys must be present and accessible in the Key Vault before you can restore an ADE-encrypted VM','You can restore individual disks from an ADE-encrypted VM backup','The restore will fail if the Key Vault is in a different region than the VM','You can restore an ADE-encrypted VM to a new VM or replace an existing VM'],
+ans:[0,1,3],
+exp:'<strong>Restaurar VMs cifradas con ADE desde Azure Backup:</strong><br><br>✅ <strong>A. Claves en Key Vault son obligatorias antes de restaurar</strong> — Requisito crítico. Sin las claves BEK/KEK en el Key Vault, Azure Backup no puede montar los discos cifrados. El proceso falla completamente sin ellas.<br>✅ <strong>B. Se pueden restaurar discos individuales</strong> — Azure Backup permite restauración granular de un disco sin restaurar la VM completa. Funciona también con ADE.<br>✅ <strong>D. Restaurar a nueva VM o reemplazar existente</strong> — Ambas opciones disponibles: crear nueva VM desde el punto de restauración o sobrescribir la VM existente.<br><br>❌ <strong>C. Falla si Key Vault en región diferente</strong> — Incorrecto. Azure Backup accede al Key Vault independientemente de la región; lo crítico es que las claves existan y el vault sea accesible.'},
+
+{id:30,type:'dd',cat:'Governance & Cost',
+q:'Your company implemented an Azure Policy initiative requiring all storage accounts to use a specific encryption setting. Resources appear as Non-Compliant. You need to fix non-compliance using the Azure Policy compliance dashboard. Arrange the steps in the correct sequence.',
+items:['Navigate to Azure Policy → Compliance in the Azure portal','Click "Remediate" to start the remediation process','Locate the non-compliant policy assignment and click on it','Create a remediation task','Review the remediation task details and included resources'],
+ans:['Navigate to Azure Policy → Compliance in the Azure portal','Locate the non-compliant policy assignment and click on it','Create a remediation task','Review the remediation task details and included resources','Click "Remediate" to start the remediation process'],
+exp:'<strong>Remediación de no cumplimiento en Azure Policy:</strong><br><br>✅ <strong>1. Azure Policy → Cumplimiento</strong> — Muestra el estado de todas las asignaciones con % de recursos conformes.<br>✅ <strong>2. Localizar y clic en asignación no conforme</strong> — Ves qué recursos son Non-Compliant y por qué política.<br>✅ <strong>3. Crear tarea de remediación</strong> — Azure genera la tarea que aplicará el efecto de la policy a recursos no conformes.<br>✅ <strong>4. Revisar recursos incluidos</strong> — Verificas el alcance y parámetros antes de ejecutar.<br>✅ <strong>5. Clic en "Remediar"</strong> — Ejecutas. Azure usa una Managed Identity para aplicar los cambios.<br><br><em>Nota:</em> Solo las policies con efectos <em>deployIfNotExists</em> o <em>modify</em> son remediables. Las de efecto <em>deny</em> o <em>audit</em> no tienen remediación automática.'},
+
+{id:31,type:'mc',cat:'Monitor & Alerts',
+q:'You are writing Log Analytics queries using KQL in Azure Monitor. Which <strong>three</strong> of the following are valid use cases for Log Analytics queries? (Select 3)',
+opts:['Running queries directly in the Log Analytics workspace query editor','Creating Log Search Alert rules that trigger when query results meet a threshold','Populating Azure Monitor Workbooks and Dashboards with query results','Automatically patching VMs based on query output','Exporting billing data to Excel'],
+ans:[0,1,2],
+exp:'<strong>Usos válidos de consultas Log Analytics (KQL) en Azure Monitor:</strong><br><br>✅ <strong>A. Consultas directas en el workspace</strong> — El uso principal: análisis interactivo de logs, métricas y diagnostics con KQL en tiempo real.<br>✅ <strong>B. Log Search Alert Rules</strong> — Consultas KQL programadas que disparan alertas cuando los resultados superan un umbral.<br>✅ <strong>C. Workbooks y Dashboards</strong> — Visualizaciones de Azure Monitor Workbooks y tiles de Dashboards basadas en consultas KQL.<br><br>❌ <strong>D. Parchear VMs automáticamente</strong> — El parcheado usa Azure Update Manager; KQL no ejecuta acciones de remediación directamente.<br>❌ <strong>E. Exportar facturación a Excel</strong> — Billing se gestiona con Azure Cost Management. Log Analytics no tiene datos de facturación por defecto.'},
+
+{id:32,type:'mc',cat:'App Services',
+q:'Your team deploys an ARM template that provisions 10 non-production Azure Web Apps (az-webapp-1 to az-webapp-10) to minimize cost. Which <strong>four</strong> statements correctly describe the deployment strategy? (Select 4)',
+opts:['A single App Service Plan should be created and all 10 Web Apps deployed to it','Each Web App is a separate resource in the ARM template but references the same App Service Plan','The App Service Plan SKU must be at least Standard (S1) to support more than one app','The compute capacity of the App Service Plan should be sized to accommodate the aggregate workload of all 10 apps','Each Web App requires its own App Service Plan for isolation'],
+ans:[0,1,2,3],
+exp:'<strong>Estrategia ARM para 10 Web Apps de no-producción con coste mínimo:</strong><br><br>✅ <strong>A. Un solo App Service Plan</strong> — Compartir el plan es la clave del ahorro: misma infraestructura para todas las apps.<br>✅ <strong>B. Cada app como recurso ARM separado referenciando el mismo plan</strong> — <code>Microsoft.Web/sites</code> individuales con el mismo <code>serverFarmId</code>. Apps independientes, infraestructura compartida.<br>✅ <strong>C. SKU mínimo Standard S1</strong> — Free y Shared tienen limitaciones severas. Standard permite múltiples apps con autoscale y deployment slots.<br>✅ <strong>D. Capacidad del plan para carga agregada de 10 apps</strong> — Los vCores del plan deben cubrir el pico combinado de todas las apps.<br><br>❌ <strong>E. Plan separado por app</strong> — Multiplicaría el coste por 10; es lo opuesto a la estrategia de coste mínimo.'},
+
+{id:33,type:'dd',cat:'App Services',
+q:'You are deploying a microservices app into Azure Container Apps. The architecture routes public internet traffic through Azure Application Gateway. The container app requires secure access to Azure Cosmos DB, Key Vault, and Container Registry — all within a Virtual Network. Arrange the deployment steps in the correct order.',
+items:['Create the Virtual Network and necessary subnets (including gateway and container apps subnets)','Configure private endpoints from Container Apps to Azure Container Registry, Cosmos DB, and Key Vault','Deploy the Azure Application Gateway and configure TLS certificates','Deploy the Azure Container Apps environment and configure its access rights'],
+ans:['Create the Virtual Network and necessary subnets (including gateway and container apps subnets)','Configure private endpoints from Container Apps to Azure Container Registry, Cosmos DB, and Key Vault','Deploy the Azure Application Gateway and configure TLS certificates','Deploy the Azure Container Apps environment and configure its access rights'],
+exp:'<strong>Container Apps con Application Gateway y acceso privado:</strong><br><br>✅ <strong>1. Crear VNet y subredes</strong> — Primero la infraestructura de red: subred para App Gateway, subred para Container Apps Environment (/21 o /23 mínimo), y subredes para private endpoints de los backends.<br>✅ <strong>2. Configurar private endpoints</strong> — Container Registry, Cosmos DB y Key Vault se conectan a la VNet. El tráfico nunca sale a internet.<br>✅ <strong>3. Desplegar Application Gateway</strong> — Frontend público con certificados TLS y reglas de enrutamiento. Requiere que exista la subred de gateway ya.<br>✅ <strong>4. Desplegar Container Apps Environment</strong> — Último porque requiere VNet y private endpoints ya configurados. Se configura en modo VNet-integrated.<br><br><em>El orden es dependiente:</em> cada paso necesita que el anterior ya exista (el entorno de Container Apps necesita la VNet; App Gateway necesita saber el backend).'},
+
+{id:34,type:'mc',cat:'Compute & Backup',
+q:'Which <strong>three</strong> statements about the Azure Recovery Services Vault (RSV) are correct? (Select 3)',
+opts:['An RSV can store backup data for Azure VMs, SQL databases, Azure Files, and SAP HANA','An RSV supports both Azure Backup and Azure Site Recovery workloads in the same vault','An RSV can only store backup data in locally-redundant storage (LRS)','An RSV supports cross-region restore (CRR) when geo-redundant storage (GRS) is enabled'],
+ans:[0,1,3],
+exp:'<strong>Recovery Services Vault (RSV) — características:</strong><br><br>✅ <strong>A. Backup de VMs, SQL, Azure Files y SAP HANA</strong> — El RSV es multi-workload: centraliza backup de múltiples tipos de recursos.<br>✅ <strong>B. Soporta Azure Backup y Azure Site Recovery en el mismo vault</strong> — El mismo vault puede gestionar backups y replicación ASR simultáneamente.<br>✅ <strong>D. Cross-Region Restore (CRR) con GRS habilitado</strong> — Con GRS activo puedes restaurar datos en la región secundaria emparejada incluso durante una interrupción de la región primaria.<br><br>❌ <strong>C. Solo LRS</strong> — Completamente falso. El RSV soporta LRS (un datacenter), GRS (replicación geográfica) y ZRS (entre zonas de disponibilidad). LRS no es la única opción.'},
+
+{id:35,type:'mc',cat:'Monitor & Alerts',
+q:'You have a Log Analytics workspace in East US. You need to understand regional constraints for sending diagnostic data to this workspace. Which Azure resource can send diagnostic data to a Log Analytics workspace in <strong>any</strong> Azure region without regional constraints?',
+opts:['Azure Virtual Machine Guest OS logs (via Azure Monitor Agent)','Azure Virtual Network Flow Logs (for Traffic Analytics)','Azure Activity Log','Azure SQL Database audit logs'],
+ans:[2],
+exp:'<strong>Restricciones regionales en Log Analytics — Activity Log sin restricciones:</strong><br><br>✅ <strong>C. Azure Activity Log</strong> — Log global a nivel de suscripción. Puede enviarse a cualquier workspace de Log Analytics en cualquier región sin restricción. Registra operaciones del plano de control (creación, modificación, eliminación de recursos).<br><br>❌ <strong>A. VM Guest OS logs vía AMA</strong> — Flexibles pero con algunas consideraciones de latencia/región. No completamente sin restricciones.<br>❌ <strong>B. VNet Flow Logs para Traffic Analytics</strong> — Restricción severa: el workspace <em>debe estar en una región emparejada específica</em> con el Network Watcher. No puedes usar cualquier workspace.<br>❌ <strong>D. SQL Database audit logs</strong> — Tienen consideraciones regionales sobre residencia de datos.'},
+
+{id:36,type:'dd',cat:'Monitor & Alerts',
+q:'A company uses Azure Monitor to analyze resource performance. Match each Azure Monitor concept with its correct description by placing them in order from most fundamental to most specific.',
+items:['Alert Conditions — define specific metrics, thresholds, and conditions that trigger an alert','Filtering — narrows metric data by splitting on dimensions to focus on specific resources','Time Granularity — the interval at which data points are collected or evaluated','Metric Aggregation — combines multiple data points within a period into a single representative value'],
+ans:['Alert Conditions — define specific metrics, thresholds, and conditions that trigger an alert','Filtering — narrows metric data by splitting on dimensions to focus on specific resources','Time Granularity — the interval at which data points are collected or evaluated','Metric Aggregation — combines multiple data points within a period into a single representative value'],
+exp:'<strong>Conceptos de Azure Monitor — jerarquía de lo general a lo específico:</strong><br><br>✅ <strong>1. Alert Conditions</strong> — El concepto más amplio: define QUÉ monitorizar y cuándo disparar la alerta.<br>✅ <strong>2. Filtering (Dimensiones)</strong> — Narrows down el alcance filtrando por dimensiones (ej. solo la VM "vm1" entre todas las VMs).<br>✅ <strong>3. Time Granularity</strong> — Resolución temporal de los datos: cada 1 min, 5 min, 1 hora. Determina la precisión de detección.<br>✅ <strong>4. Metric Aggregation</strong> — Operación matemática: Average, Max, Min, Count, Total sobre los datos del período.<br><br><em>Jerarquía:</em> Defines QUÉ vigilar → en qué datos fijarte → a qué resolución temporal → cómo calcular el valor final.'},
+
+{id:37,type:'dd',cat:'Monitor & Alerts',
+q:'You need to configure Azure Monitor diagnostic settings to send logs and metrics from an Azure Communications Services resource to a Log Analytics workspace. Arrange the steps in the correct sequence.',
+items:['Navigate to the Communications Services resource in the Azure portal','Click "Diagnostic settings" in the Monitoring section of the left navigation','Click "Add diagnostic setting" to create a new one','Name the diagnostic setting and select the logs/metrics and destination workspace'],
+ans:['Navigate to the Communications Services resource in the Azure portal','Click "Diagnostic settings" in the Monitoring section of the left navigation','Click "Add diagnostic setting" to create a new one','Name the diagnostic setting and select the logs/metrics and destination workspace'],
+exp:'<strong>Configurar diagnósticos en Azure Communications Services:</strong><br><br>✅ <strong>1. Navegar al recurso de Communications Services</strong> — Punto de partida siempre es el recurso específico en el portal.<br>✅ <strong>2. Diagnostic settings en menú Monitoring</strong> — Panel izquierdo → sección Monitoring → Diagnostic settings.<br>✅ <strong>3. Add diagnostic setting</strong> — Crea nueva configuración (pueden coexistir múltiples para diferentes destinos).<br>✅ <strong>4. Nombre, categorías y destino</strong> — Seleccionas qué logs/métricas capturar y dónde enviarlos (Log Analytics workspace, Storage Account, Event Hub).<br><br><em>Este flujo es idéntico para prácticamente cualquier recurso Azure con soporte de diagnósticos:</em> recurso → Monitoring → Diagnostic settings → Add → Configurar.'},
+
+{id:38,type:'mc',cat:'Monitor & Alerts',
+q:'You are tasked with writing and optimizing log queries using Azure Monitor. Which <strong>three</strong> of the following are correct uses of Log Analytics queries in Azure Monitor? (Select 3)',
+opts:['Directly querying the Log Analytics workspace using KQL in the Azure portal','Creating Log Search Alert rules based on query results','Automatically remediating non-compliant Azure Policy resources','Populating Azure Monitor Workbooks and Dashboards','Generating monthly cost reports for all subscriptions'],
+ans:[0,1,3],
+exp:'<strong>Usos correctos de Log Analytics/KQL en Azure Monitor:</strong><br><br>✅ <strong>A. Consultar directamente el workspace</strong> — Análisis interactivo con KQL en tiempo real en el editor del workspace.<br>✅ <strong>B. Log Search Alert Rules</strong> — KQL programadas que disparan alertas cuando los resultados cumplen una condición.<br>✅ <strong>D. Workbooks y Dashboards</strong> — Visualizaciones e informes operativos basados en consultas KQL.<br><br>❌ <strong>C. Remediar recursos no conformes con Policy</strong> — La remediación usa Azure Policy (tareas de remediación con Managed Identity). KQL no ejecuta acciones de remediación.<br>❌ <strong>E. Informes de costes mensuales</strong> — Azure Cost Management gestiona datos de facturación. Log Analytics no tiene datos de billing por defecto.'},
+
+{id:39,type:'dd',cat:'App Services',
+q:'You are reviewing Azure App Service VNet Integration capabilities. Arrange the following descriptions in order from the core definition → general benefit → specific use cases.',
+items:['Outbound calls from the App Service go into the integrated Virtual Network instead of the internet','Access resources in Resource Manager VNets deployed in the same Azure region','Reach resources in peered VNets and on-premises networks connected via VPN or ExpressRoute','Control outbound traffic using Network Security Groups and User Defined Routes (UDRs)'],
+ans:['Outbound calls from the App Service go into the integrated Virtual Network instead of the internet','Access resources in Resource Manager VNets deployed in the same Azure region','Reach resources in peered VNets and on-premises networks connected via VPN or ExpressRoute','Control outbound traffic using Network Security Groups and User Defined Routes (UDRs)'],
+exp:'<strong>VNet Integration en App Service — de lo fundamental a lo específico:</strong><br><br>✅ <strong>1. Tráfico saliente va a la VNet</strong> — Definición core: con VNet Integration, las llamadas salientes de la app entran en la VNet integrada en lugar de salir a internet directamente.<br>✅ <strong>2. Acceso a recursos en VNets de la misma región</strong> — Beneficio directo: la app comunica con VMs, bases de datos y servicios internos sin IPs públicas.<br>✅ <strong>3. Alcanzar VNets peered y redes on-premises</strong> — A través de peering o VPN/ExpressRoute conectados a la VNet, la app alcanza recursos en otras VNets o en el datacenter local.<br>✅ <strong>4. Controlar tráfico con NSGs y UDRs</strong> — Como el tráfico fluye por la VNet, puedes aplicar NSGs (filtrado) y UDRs (enrutamiento forzado por firewall).<br><br>❌ <strong>Tráfico entrante privado</strong> — VNet Integration es solo para tráfico saliente. Para entrante privado se usan Private Endpoints.'},
+
+// ── mc continued ───────────────────────────────────────────────
+{id:40,type:'mc',cat:'Compute & Backup',
+q:'When choosing a backup and recovery solution for Azure resources, which term describes the maximum amount of data loss (measured in time) that is acceptable in the event of a failure?',
+opts:['Recovery Time Objective (RTO)','Recovery Point Objective (RPO)','Backup retention period','Mean Time to Recovery (MTTR)'],
+ans:[1],
+exp:'<strong>RPO — Recovery Point Objective:</strong><br><br>✅ <strong>B. Recovery Point Objective (RPO)</strong> — Define la pérdida máxima de datos aceptable medida en tiempo. RPO=4h significa que puedes perder hasta 4 horas de datos. Determina con qué frecuencia debes hacer backups o replicar.<br><br>❌ <strong>A. RTO (Recovery Time Objective)</strong> — Define cuánto tiempo puede estar el servicio inactivo. Responde a "¿cuánto tardo en restaurar?", no "¿cuántos datos pierdo?".<br>❌ <strong>C. Retention period</strong> — Cuánto tiempo se guardan los backups. No define el máximo de pérdida tolerable.<br>❌ <strong>D. MTTR (Mean Time to Recovery)</strong> — Media histórica del tiempo real de recuperación. Métrica operacional, no objetivo de diseño.'},
+
+{id:41,type:'mc',cat:'Security & KeyVault',
+q:'You need to protect remote access to a jumpbox virtual machine while reducing the risk of unauthorized access. Which <strong>three</strong> security measures should you implement? (Select 3)',
+opts:['Enable Azure Bastion for browser-based RDP/SSH without exposing a public IP','Enable Just-In-Time (JIT) VM access to open ports only when needed','Install a web server on the jumpbox VM','Apply inbound NSG rules restricting SSH/RDP access to specific source IP addresses','Enable automatic VM shutdown during business hours'],
+ans:[0,1,3],
+exp:'<strong>Seguridad para jumpbox VM:</strong><br><br>✅ <strong>A. Azure Bastion</strong> — RDP/SSH seguro desde el portal sin IP pública en la jumpbox. Elimina exposición de puertos 3389/22 a internet.<br>✅ <strong>B. Just-In-Time (JIT) VM Access</strong> — Cierra puertos de administración por defecto; los abre solo cuando un usuario autorizado lo solicita, por tiempo limitado y desde IPs específicas. Reduce drásticamente la ventana de ataque.<br>✅ <strong>D. NSG rules con IP de origen restringida</strong> — Solo las IPs de administradores conocidos pueden conectarse a los puertos de gestión.<br><br>❌ <strong>C. Instalar servidor web en la jumpbox</strong> — Amplía la superficie de ataque. Una jumpbox debe tener el mínimo de software instalado.<br>❌ <strong>E. Apagar durante horario laboral</strong> — Contraproducente: la jumpbox se necesita precisamente en horario laboral.'},
+
+{id:42,type:'mc',cat:'Monitor & Alerts',
+q:'What is the primary storage system for Azure Monitor Metrics data that is automatically used when Azure resources emit metrics?',
+opts:['Azure SQL Database','Azure Monitor internal time-series database','Azure Blob Storage (hot tier)','Azure Log Analytics workspace'],
+ans:[1],
+exp:'<strong>Almacenamiento primario de Azure Monitor Metrics:</strong><br><br>✅ <strong>B. Base de datos interna de series temporales</strong> — Las métricas se almacenan automáticamente en una BD interna optimizada para series temporales. Retención por defecto: 93 días. Se consulta vía API/portal, no accesible directamente.<br><br>❌ <strong>A. Azure SQL Database</strong> — Optimizado para consultas relacionales; Azure Monitor no usa SQL para métricas nativas.<br>❌ <strong>C. Azure Blob Storage</strong> — Destino de <em>exportación</em> para retención a largo plazo, no almacenamiento primario automático.<br>❌ <strong>D. Log Analytics workspace</strong> — Destino de diagnósticos y logs. Las métricas pueden enviarse aquí para KQL avanzado, pero no es el almacenamiento primario.'},
+
+{id:43,type:'mc',cat:'Monitor & Alerts',
+q:'You want to publish custom metrics to Azure Monitor from your application. Which <strong>three</strong> methods allow you to send custom metrics? (Select 3)',
+opts:['Azure Monitor REST API','Azure Diagnostics extension (on Azure VMs)','Application Insights SDK','Azure Policy custom initiative definitions'],
+ans:[0,1,2],
+exp:'<strong>Métodos para publicar métricas personalizadas en Azure Monitor:</strong><br><br>✅ <strong>A. Azure Monitor REST API</strong> — POST al endpoint regional de métricas con autenticación Azure AD. Método más flexible para cualquier aplicación o lenguaje.<br>✅ <strong>B. Azure Diagnostics Extension</strong> — Extensión de VM que captura contadores de rendimiento Windows/Linux y los envía como métricas personalizadas a Azure Monitor.<br>✅ <strong>C. Application Insights SDK</strong> — <code>TrackMetric()</code> y eventos personalizados se envían automáticamente a Azure Monitor via el SDK de AI.<br><br>❌ <strong>D. Azure Policy custom initiative</strong> — Las iniciativas de Policy definen reglas de cumplimiento; no emiten métricas de monitorización. Evalúan configuración, no datos de rendimiento.'},
+
+{id:44,type:'mc',cat:'Networking',
+q:'A company has an Azure Web App in Central US. The team wants to serve content globally with low latency. What is an Azure Content Delivery Network (CDN)?',
+opts:['A single caching server located in the Azure Central US region','A distributed network of servers at edge locations that delivers web content efficiently from locations close to users','An Azure service exclusively for video streaming and media content','A private dedicated network that connects Azure datacenters to customers\' on-premises locations'],
+ans:[1],
+exp:'<strong>¿Qué es Azure CDN?</strong><br><br>✅ <strong>A. Red distribuida de servidores en ubicaciones edge que entrega contenido eficientemente</strong> — Azure CDN es una red global de Points of Presence (PoPs) que cachean contenido estático (imágenes, scripts, videos, documentos) y lo sirven desde el servidor más cercano al usuario, reduciendo latencia.<br><br>❌ <strong>B. Un único servidor de caché en Central US</strong> — Lo opuesto: la CDN tiene cientos de nodos globalmente. Un único servidor de caché no es una CDN.<br>❌ <strong>C. Solo disponible en ciertas regiones</strong> — Azure CDN tiene PoPs en decenas de ubicaciones mundiales sin restricción regional.<br>❌ <strong>D. Solo para streaming de video</strong> — Azure CDN sirve cualquier contenido HTTP/HTTPS: sitios web, descargas, APIs, imágenes. El streaming es uno de los muchos casos de uso.'},
+
+// ── dropq continued ────────────────────────────────────────────
+{id:45,type:'dropq',cat:'Identity & Access',
+q:'You have a Microsoft Entra tenant with the following users and groups:<br><br><strong>Users:</strong> Admin1 (Global Administrator, Assigned), Admin2 (Authentication Policy Administrator, Dynamic group membership), Admin3 (Authentication Administrator, Assigned)<br><strong>Groups:</strong> Group1 (Security, Assigned), Group2 (Microsoft 365, Dynamic), Group3 (Mail-enabled security, Assigned)<br><br>Self-service password reset (SSPR) needs to be configured. For each question, select the correct answer.',
+dropdowns:[
+  {label:'Which users can configure SSPR for the tenant?',options:['Admin1 only','Admin2 only','Admin3 only','Admin1 and Admin2 only','Admin1, Admin2, and Admin3'],ans:3},
+  {label:'For which group can SSPR be scoped/enabled?',options:['Group1 only','Group2 only','Group1 or Group2 only','Group1 or Group3 only','Group1, Group2, or Group3'],ans:0}
+],
+exp:'<strong>SSPR — quién puede configurarlo y para qué grupos:</strong><br><br>✅ <strong>Configuran SSPR: Admin1 y Admin2</strong> — Solo <em>Global Administrator</em> (Admin1) y <em>Authentication Policy Administrator</em> (Admin2) pueden modificar la directiva SSPR del tenant. Admin3 (Authentication Administrator) puede resetear contraseñas manualmente pero <em>no</em> puede configurar la directiva SSPR.<br><br>✅ <strong>Grupo habilitado: solo Group1</strong> — SSPR con alcance "Grupo seleccionado" acepta únicamente <em>grupos de seguridad con membresía Assigned</em>. Group1 cumple ambas condiciones. Group2 (Microsoft 365 + Dynamic) no es válido: la membresía dinámica no es compatible. Group3 (Mail-enabled security) tampoco es válido para SSPR.<br><br>❌ <strong>Admin3</strong> — Puede resetear pero no configurar la directiva global.<br>❌ <strong>Group2 (Dynamic) o Group3 (Mail-enabled)</strong> — SSPR solo acepta Security groups con membresía estática Assigned.'},
+
+{id:46,type:'dd',cat:'Compute & Backup',
+q:'You have an Azure VM configured with Azure Disk Encryption (ADE) using customer-managed keys (CMK) stored in Azure Key Vault. You need to ensure that newly-created managed VM disks are automatically encrypted with the CMK. Which <strong>four</strong> actions should you perform in sequence?',
+items:['Attach the newly created disk to the VM','Define the managed disk and reference the Disk Encryption Set in its configuration','Create an Azure Disk Encryption Set (DES) referencing the Key Vault and the specific CMK key','Download/export the managed disk configuration that references the Disk Encryption Set'],
+ans:['Create an Azure Disk Encryption Set (DES) referencing the Key Vault and the specific CMK key','Define the managed disk and reference the Disk Encryption Set in its configuration','Download/export the managed disk configuration that references the Disk Encryption Set','Attach the newly created disk to the VM'],
+exp:'<strong>Cifrado de discos gestionados con CMK usando Disk Encryption Set:</strong><br><br>✅ <strong>1. Crear Disk Encryption Set (DES)</strong> — Recurso Azure que vincula una clave específica del Key Vault con los discos. El Key Vault debe tener Soft delete y Purge protection habilitados.<br>✅ <strong>2. Configurar el disco gestionado referenciando el DES</strong> — Al crear/modificar el disco, especificas el DES. El disco usará CMK en lugar del cifrado por defecto de Azure (PME).<br>✅ <strong>3. Verificar la configuración del disco</strong> — Confirmas que el disco referencia correctamente el DES y que la clave del Key Vault es accesible.<br>✅ <strong>4. Conectar el disco cifrado a la VM</strong> — Una vez configurado con CMK, lo adjuntas a la VM.<br><br>❌ <strong>Adjuntar antes de configurar DES</strong> — El disco debe tener el DES configurado antes de adjuntarlo para garantizar que todos los datos escritos estén cifrados con CMK desde el primer momento.<br>❌ <strong>Confundir con ADE</strong> — ADE usa BitLocker/dm-crypt dentro de la VM. CMK con DES opera a nivel de plataforma de almacenamiento (Server-Side Encryption), no dentro del sistema operativo de la VM.'}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const LS='az104_dificiles_v1';
+const DEF={attempted:[],failed:[],correct:0,incorrect:0,bookmarks:[]};
+let st=JSON.parse(JSON.stringify(DEF));
+
+let ex={qs:[],cur:0,ans:[],confirmed:[],peeks:[],flagged:[],ddState:[],dropSels:[],mode:'',sc:0,si:0};
+
+function loadSt(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);st={...DEF,...p};}}catch(e){}}
+function saveSt(){try{localStorage.setItem(LS,JSON.stringify(st));}catch(e){}}
+function $(i){return document.getElementById(i);}
+function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
+function catCls(c){
+  const m={'Identity & Access':'b-blue','Networking':'b-purple','Compute & Backup':'b-amber',
+           'Storage':'b-green','App Services':'b-teal','Governance & Cost':'b-amber',
+           'Monitor & Alerts':'b-red','Security & KeyVault':'b-purple','Automation & Config':'b-blue','Azure General':'b-green'};
+  return m[c]||'b-blue';
+}
+
+function showV(id){
+  ['vh','ve','vr','vfc'].forEach(v=>$(v).classList.add('hidden'));
+  $(id).classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════════════
+function home(){
+  loadSt();
+  const tot=QB.length,att=st.attempted.length,fail=st.failed.length;
+  const r=(st.correct+st.incorrect)>0?Math.round((st.correct/(st.correct+st.incorrect))*100):0;
+  const col=r>=80?'var(--green)':r>=70?'var(--amber)':'var(--red)';
+  $('vh').innerHTML=`
+    <div class="line-accent"></div>
+    <div class="g3">
+      <div class="metric"><div class="metric-label">Total</div><div class="metric-value" style="color:var(--accent)">${tot}</div></div>
+      <div class="metric"><div class="metric-label">Correctas</div><div class="metric-value" style="color:var(--green)">${st.correct}</div></div>
+      <div class="metric"><div class="metric-label">Falladas</div><div class="metric-value" style="color:var(--red)">${st.incorrect}</div></div>
+    </div>
+    ${r>0?`<div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:10px;color:var(--text-muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em">Score actual</span>
+        <span style="font-size:20px;font-weight:600;font-family:var(--mono);color:${col}">${r}%</span>
+      </div>
+      <div class="r-bar"><div class="r-fill" style="width:${r}%;background:${col}"></div></div>
+    </div>`:''}
+    <hr class="sep">
+    <p class="slabel">Modo examen</p>
+    <button class="mode-card" onclick="startSession('study')">
+      <div class="mode-icon">📝</div>
+      <div><div class="mode-title">Estudio — feedback inmediato</div><div class="mode-desc">Ves si aciertas o fallas tras cada respuesta. Explicaciones visibles al instante.</div></div>
+    </button>
+    <button class="mode-card" onclick="startSession('test')">
+      <div class="mode-icon">🎯</div>
+      <div><div class="mode-title">Test — corrección al final</div><div class="mode-desc">Responde todas las preguntas y obtén tu nota al finalizar.</div></div>
+    </button>
+    ${fail>0?`<button class="mode-card" onclick="startSession('review')">
+      <div class="mode-icon">🔁</div>
+      <div><div class="mode-title">Repasar fallos (${fail})</div><div class="mode-desc">Vuelve a las preguntas que fallaste para reforzar los puntos débiles.</div></div>
+    </button>`:''}
+    <hr class="sep">
+    <p class="slabel">Modo repaso</p>
+    <button class="mode-card" onclick="startFlashcards('all')" style="border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.06)">
+      <div class="mode-icon" style="background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3)">🃏</div>
+      <div><div class="mode-title">Flashcards — todas las preguntas</div><div class="mode-desc">Repasa conceptos clave con tarjetas. Muestra la pregunta, luego revela la respuesta y explicación. Marca si la sabías o no.</div></div>
+    </button>
+    ${fail>0?`<button class="mode-card" onclick="startFlashcards('failed')" style="border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)">
+      <div class="mode-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🔴</div>
+      <div><div class="mode-title">Flashcards — solo fallos (${fail})</div><div class="mode-desc">Tarjetas solo con las preguntas que has fallado anteriormente.</div></div>
+    </button>`:''}
+    <hr class="sep">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${att>0?`<button class="btn btn-sm" onclick="askReset()">↺ Resetear progreso</button>`:''}
+    </div>`;
+  showV('vh');
+}
+
+function startSession(mode){
+  let pool;
+  if(mode==='review') pool=shuffle(QB.filter(q=>st.failed.includes(q.id)));
+  else pool=shuffle(QB);
+
+  ex={
+    qs:pool, cur:0,
+    ans:new Array(pool.length).fill(null),
+    confirmed:new Array(pool.length).fill(false),
+    peeks:new Array(pool.length).fill(false),
+    flagged:new Array(pool.length).fill(false),
+    ddState:pool.map(q=>q.type==='dd'?{slots:new Array(q.ans.length).fill(null),sel:null}:null),
+    dropSels:pool.map(q=>q.type==='dropq'?new Array(q.dropdowns.length).fill(null):null),
+    mode, sc:0, si:0
+  };
+  showV('ve');
+  renderQ();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CORRECT / ANSWERED
+// ═══════════════════════════════════════════════════════════════
+function isCorrect(ans,q){
+  if(q.type==='hs'){
+    if(!Array.isArray(ans))return false;
+    return q.ans.length===ans.length&&q.ans.every((a,i)=>a===ans[i]);
+  }
+  if(q.type==='dd'){
+    if(!Array.isArray(ans))return false;
+    return q.ans.length===ans.length&&q.ans.every((a,i)=>a===ans[i]);
+  }
+  if(q.type==='dropq'){
+    if(!Array.isArray(ans))return false;
+    return q.dropdowns.every((d,i)=>ans[i]===d.ans);
+  }
+  if(Array.isArray(q.ans)){
+    if(!Array.isArray(ans))return false;
+    return q.ans.length===ans.length&&q.ans.every(a=>ans.includes(a));
+  }
+  return ans===q.ans;
+}
+
+function isQAnswered(i){
+  const q=ex.qs[i];
+  if(q.type==='dd'||q.type==='hs'||q.type==='dropq'||Array.isArray(q.ans))return ex.confirmed[i];
+  return ex.ans[i]!==null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ROUTER
+// ═══════════════════════════════════════════════════════════════
+function renderQ(){
+  const q=ex.qs[ex.cur];
+  if(q.type==='dd') return renderDDQ();
+  if(q.type==='hs') return renderHSQ();
+  if(q.type==='dropq') return renderDropQ();
+  renderMCQ();
+}
+
+// ── DOT NAV shared helper ────────────────────────────────────────
+function makeDots(){
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  return ex.qs.map((_,i)=>{
+    const qi=ex.qs[i];const answered=isQAnswered(i);
+    let bg='var(--surface3)',w='16px';
+    if(answered){bg=isStudy?(isCorrect(ex.ans[i],qi)?'var(--green)':'var(--red)'):'var(--accent-dim)';}
+    else if(ex.peeks[i])bg='var(--amber)';
+    if(ex.flagged[i])bg='var(--amber)';
+    if(i===ex.cur){bg='var(--accent)';w='26px';}
+    return `<button onclick="goQ(${i})" title="Q${i+1}" class="dot-q" style="width:${w};background:${bg}"></button>`;
+  }).join('');
+}
+
+function makeTopBar(){
+  const tot=ex.qs.length,pct=Math.round((ex.cur/tot)*100);
+  const modeTag={test:'<span class="badge b-red">Test</span>',study:'<span class="badge b-blue">Estudio</span>',review:'<span class="badge b-amber">Repaso</span>'}[ex.mode];
+  const q=ex.qs[ex.cur];
+  const flagCls=ex.flagged[ex.cur]?'flagged':'';
+  return `
+    <div class="exam-top">
+      <button class="btn btn-sm" onclick="askExit()">← Salir</button>
+      ${modeTag}
+      <span class="q-counter">${ex.cur+1}/${tot}</span>
+    </div>
+    <div class="prog-out"><div class="prog-in" style="width:${pct}%"></div></div>
+    <div class="dots-wrap"><div class="dots-nav">${makeDots()}</div></div>
+    <div class="q-meta">
+      <span class="badge ${catCls(q.cat)}">${q.cat}</span>
+      <div class="ctrl-row">
+        ${!isQAnswered(ex.cur)&&!ex.peeks[ex.cur]?`<button class="flag-btn" onclick="peekAnswer()" style="color:var(--amber);border-color:var(--amber-b)">👁 Ver resp.</button>`:''}
+        <button class="flag-btn ${flagCls}" onclick="toggleFlag()">${ex.flagged[ex.cur]?'🚩':'🏳'} Marcar</button>
+      </div>
+    </div>`;
+}
+
+function makeNavHTML(done){
+  const tot=ex.qs.length,isLast=ex.cur===tot-1;
+  const prevBtn=ex.cur>0
+    ?`<button class="btn btn-sm" onclick="goQ(${ex.cur-1})">← Anterior</button>`
+    :`<button class="btn btn-sm" style="opacity:.3;cursor:default" disabled>← Anterior</button>`;
+  const nextBtn=isLast
+    ?`<button class="btn btn-p btn-sm" onclick="askFinish()">Finalizar ✓</button>`
+    :`<button class="btn btn-sm ${done?'btn-p':''}" onclick="goQ(${ex.cur+1})">Siguiente →</button>`;
+  return `<div class="nav-always">${prevBtn}<span></span>${nextBtn}</div>`;
+}
+
+function scoreAnswer(ok){
+  const q=ex.qs[ex.cur];
+  if(!st.attempted.includes(q.id)){
+    st.attempted.push(q.id);
+    if(ok){st.correct++;ex.sc++;}
+    else{st.incorrect++;ex.si++;if(!st.failed.includes(q.id))st.failed.push(q.id);}
+  } else {
+    if(ok){ex.sc++;const fi=st.failed.indexOf(q.id);if(fi>-1)st.failed.splice(fi,1);}
+    else ex.si++;
+  }
+  saveSt();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MC RENDERER
+// ═══════════════════════════════════════════════════════════════
+function renderMCQ(){
+  const q=ex.qs[ex.cur];
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isMulti=Array.isArray(q.ans);
+  const confirmed=ex.confirmed[ex.cur];
+  const peeked=ex.peeks[ex.cur];
+  const done=confirmed||peeked;
+  const answered=isMulti?confirmed:(ex.ans[ex.cur]!==null);
+  const pendingMulti=isMulti&&Array.isArray(ex.ans[ex.cur])?ex.ans[ex.cur]:[];
+  const L=['A','B','C','D','E'];
+
+  const multiHint=isMulti
+    ?`<div style="font-size:11px;color:var(--amber);margin-bottom:8px;font-family:var(--mono);padding:6px 10px;background:var(--amber-dim);border:1px solid var(--amber-b);border-radius:6px">▣ SELECCIÓN MÚLTIPLE — Elige ${q.ans.length} opciones</div>`:'';
+
+  const optHTML=q.opts.map((opt,i)=>{
+    let cls='';
+    const isDisabled=peeked||(answered&&(isStudy||isMulti));
+    if(peeked){if(isMulti?q.ans.includes(i):(i===q.ans))cls='reveal-c';}
+    else if(answered){
+      if(isStudy||isMulti){
+        if(isMulti?q.ans.includes(i):(i===q.ans))cls='correct';
+        else if(isMulti?pendingMulti.includes(i):(i===ex.ans[ex.cur]))cls='wrong';
+      } else {if(i===ex.ans[ex.cur])cls='selected-pending';}
+    } else {
+      if(isMulti&&pendingMulti.includes(i))cls='selected-pending';
+      else if(!isMulti&&i===ex.ans[ex.cur])cls='selected-pending';
+    }
+    const clickFn=isMulti?`pickMulti(${i})`:`pick(${i})`;
+    const label=isMulti
+      ?`<span class="opt-l" style="border-radius:4px">${(answered&&q.ans.includes(i))||(!answered&&!peeked&&pendingMulti.includes(i))?'✓':L[i]}</span>`
+      :`<span class="opt-l">${L[i]}</span>`;
+    return `<button class="opt ${cls}" onclick="${clickFn}" ${isDisabled?'disabled':''}>${label}<span>${opt}</span></button>`;
+  }).join('');
+
+  let confirmBtn='';
+  if(isMulti&&!answered&&!peeked){
+    confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmMulti()" ${pendingMulti.length===0?'disabled':''}>Confirmar selección (${pendingMulti.length}/${q.ans.length} elegidas)</button>`;
+  }
+
+  let expHTML='';
+  if(peeked){
+    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans]+'. '+q.opts[q.ans]);
+    expHTML=`<div class="exp" style="border-left-color:var(--amber)"><span class="verd vpeek">👁 RESPUESTA REVELADA — ${corrLabel}</span>${q.exp||''}</div>`;
+  } else if(answered&&isStudy){
+    const ok=isCorrect(ex.ans[ex.cur],q);
+    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans]+'. '+q.opts[q.ans]);
+    expHTML=`<div class="exp" style="border-left-color:${ok?'var(--green)':'var(--red)'}"><span class="verd ${ok?'vok':'vbad'}">${ok?'✓ CORRECTO':'✗ INCORRECTO'} — ${corrLabel}</span>${q.exp||''}</div>`;
+  } else if(answered&&!isStudy){
+    expHTML=`<div class="exp" style="border-left-color:var(--accent)"><span class="verd" style="color:var(--accent)">✓ Respuesta guardada.</span></div>`;
+  }
+
+  $('ve').innerHTML=`${makeTopBar()}<div class="qcard">${multiHint}${q.q}</div>${optHTML}${confirmBtn}<div id="exp-area">${expHTML}</div>${makeNavHTML(done)}`;
+  scrollDot();
+}
+
+function pick(i){
+  if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  ex.ans[ex.cur]=i;
+  if(isStudy){
+    const ok=isCorrect(i,ex.qs[ex.cur]);
+    scoreAnswer(ok);
+  }
+  renderMCQ();
+}
+
+function pickMulti(i){
+  if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  if(!Array.isArray(ex.ans[ex.cur]))ex.ans[ex.cur]=[];
+  const idx=ex.ans[ex.cur].indexOf(i);
+  if(idx>-1)ex.ans[ex.cur].splice(idx,1);
+  else ex.ans[ex.cur].push(i);
+  renderMCQ();
+}
+
+function confirmMulti(){
+  const q=ex.qs[ex.cur];
+  if(!Array.isArray(ex.ans[ex.cur]))ex.ans[ex.cur]=[];
+  ex.confirmed[ex.cur]=true;
+  scoreAnswer(isCorrect(ex.ans[ex.cur],q));
+  renderMCQ();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DD RENDERER
+// ═══════════════════════════════════════════════════════════════
+function renderDDQ(){
+  const q=ex.qs[ex.cur];
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const confirmed=ex.confirmed[ex.cur];
+  const peeked=ex.peeks[ex.cur];
+  const done=confirmed||peeked;
+  const ds=ex.ddState[ex.cur]||(ex.ddState[ex.cur]={slots:new Array(q.ans.length).fill(null),sel:null});
+
+  const usedItems=ds.slots.filter(s=>s!==null);
+  const poolHTML=q.items.map(item=>{
+    const used=!done&&usedItems.includes(item);
+    const sel=!done&&ds.sel===item;
+    return `<div class="dd-item${used?' used':''}${sel?' selected':''}" onclick="clickDDItem(${JSON.stringify(item)})">${item}</div>`;
+  }).join('');
+
+  const slotsHTML=ds.slots.map((val,n)=>{
+    let cls='dd-slot'+(val?' filled':'');
+    if(done){
+      if(peeked)cls='dd-slot filled';
+      else if(val===q.ans[n])cls='dd-slot correct';
+      else cls='dd-slot wrong';
+    }
+    const display=done?(peeked?q.ans[n]:(ex.ans[ex.cur]?.[n]||'(vacío)')):(val||'');
+    const clickAttr=done?'':`onclick="clickDDSlot(${n})"`;
+    return `<div class="${cls}" ${clickAttr}>
+      <span class="dd-slot-label">Paso ${n+1}</span>
+      <span class="dd-slot-val">${display||'<span style="color:var(--text-muted);font-style:italic">Toca para colocar aquí</span>'}</span>
+      ${done&&!peeked&&val!==q.ans[n]?`<span style="font-size:11px;color:var(--green);margin-left:8px">→ ${q.ans[n]}</span>`:''}
+    </div>`;
+  }).join('');
+
+  const allFilled=ds.slots.every(s=>s!==null);
+  let confirmBtn='';
+  if(!done)confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmDD()" ${allFilled?'':'disabled'}>Confirmar orden (${ds.slots.filter(s=>s).length}/${q.ans.length} colocados)</button>`;
+
+  let expHTML='';
+  if(peeked){expHTML=`<div class="exp" style="border-left-color:var(--amber)"><span class="verd vpeek">👁 RESPUESTA REVELADA</span>${q.exp||''}</div>`;}
+  else if(confirmed&&isStudy){const ok=isCorrect(ex.ans[ex.cur],q);expHTML=`<div class="exp" style="border-left-color:${ok?'var(--green)':'var(--red)'}"><span class="verd ${ok?'vok':'vbad'}">${ok?'✓ CORRECTO':'✗ INCORRECTO'}</span>${q.exp||''}</div>`;}
+  else if(confirmed&&!isStudy){expHTML=`<div class="exp" style="border-left-color:var(--accent)"><span class="verd" style="color:var(--accent)">✓ Orden guardado.</span></div>`;}
+
+  $('ve').innerHTML=`${makeTopBar()}<div class="qcard"><div style="font-size:11px;color:var(--accent);font-family:var(--mono);margin-bottom:8px;padding:5px 10px;background:rgba(99,102,241,.1);border-radius:6px;border:1px solid rgba(99,102,241,.25)">↕ DRAG & DROP — Selecciona un elemento y toca el paso donde colocarlo</div>${q.q}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-family:var(--mono)">Elementos disponibles:</div>
+    <div class="dd-pool">${poolHTML}</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-family:var(--mono)">Coloca en el orden correcto:</div>
+    <div class="dd-slots">${slotsHTML}</div>
+    ${confirmBtn}
+    <div id="exp-area">${expHTML}</div>
+    ${makeNavHTML(done)}`;
+  scrollDot();
+}
+
+function clickDDItem(item){
+  const ds=ex.ddState[ex.cur];
+  if(!ds||ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  const slotIdx=ds.slots.indexOf(item);
+  if(slotIdx>-1){ds.slots[slotIdx]=null;ds.sel=item;renderDDQ();return;}
+  ds.sel=(ds.sel===item)?null:item;
+  renderDDQ();
+}
+
+function clickDDSlot(n){
+  const ds=ex.ddState[ex.cur];
+  if(!ds||ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  if(ds.sel!==null){
+    if(ds.slots[n]!==null){const prev=ds.slots[n];ds.slots[n]=ds.sel;ds.sel=prev;}
+    else{ds.slots[n]=ds.sel;ds.sel=null;}
+  } else if(ds.slots[n]!==null){ds.sel=ds.slots[n];ds.slots[n]=null;}
+  renderDDQ();
+}
+
+function confirmDD(){
+  const q=ex.qs[ex.cur];const ds=ex.ddState[ex.cur];
+  if(!ds||!ds.slots.every(s=>s!==null))return;
+  ex.ans[ex.cur]=[...ds.slots];
+  ex.confirmed[ex.cur]=true;
+  scoreAnswer(isCorrect(ex.ans[ex.cur],q));
+  renderDDQ();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HS RENDERER
+// ═══════════════════════════════════════════════════════════════
+function renderHSQ(){
+  const q=ex.qs[ex.cur];
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const confirmed=ex.confirmed[ex.cur];
+  const peeked=ex.peeks[ex.cur];
+  const done=confirmed||peeked;
+  if(!Array.isArray(ex.ans[ex.cur]))ex.ans[ex.cur]=new Array(q.statements.length).fill(null);
+  const picks=ex.ans[ex.cur];
+
+  const rows=q.statements.map((stmt,n)=>{
+    const cur=picks[n];const ans=q.ans[n];
+    const mkBtn=(val)=>{
+      let cls='hs-btn';
+      if(done){if(peeked)cls+=(val===ans)?' reveal-correct':'';else{if(val===ans)cls+=' correct';else if(cur===val&&val!==ans)cls+=' wrong';}}
+      else if(cur===val)cls+=' sel';
+      return `<button class="${cls}" onclick="clickHS(${n},'${val}')" ${done?'disabled':''}>${val}</button>`;
+    };
+    return `<tr><td>${stmt}</td><td>${mkBtn('Yes')}</td><td>${mkBtn('No')}</td></tr>`;
+  }).join('');
+
+  const allPicked=picks.every(p=>p!==null);
+  let confirmBtn='';
+  if(!done)confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmHS()" ${allPicked?'':'disabled'}>Confirmar respuestas (${picks.filter(p=>p).length}/${q.statements.length})</button>`;
+
+  let expHTML='';
+  if(peeked){expHTML=`<div class="exp" style="border-left-color:var(--amber)"><span class="verd vpeek">👁 RESPUESTA REVELADA</span>${q.exp||''}</div>`;}
+  else if(confirmed&&isStudy){const ok=isCorrect(ex.ans[ex.cur],q);expHTML=`<div class="exp" style="border-left-color:${ok?'var(--green)':'var(--red)'}"><span class="verd ${ok?'vok':'vbad'}">${ok?'✓ CORRECTO':'✗ INCORRECTO'}</span>${q.exp||''}</div>`;}
+  else if(confirmed&&!isStudy){expHTML=`<div class="exp" style="border-left-color:var(--accent)"><span class="verd" style="color:var(--accent)">✓ Respuestas guardadas.</span></div>`;}
+
+  $('ve').innerHTML=`${makeTopBar()}<div class="qcard">${q.q}</div>
+    <table class="hs-table"><thead><tr><th style="text-align:left">Afirmación</th><th>Yes</th><th>No</th></tr></thead><tbody>${rows}</tbody></table>
+    ${confirmBtn}<div id="exp-area">${expHTML}</div>${makeNavHTML(done)}`;
+  scrollDot();
+}
+
+function clickHS(n,val){
+  if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  if(!Array.isArray(ex.ans[ex.cur]))ex.ans[ex.cur]=new Array(ex.qs[ex.cur].statements.length).fill(null);
+  ex.ans[ex.cur][n]=val;
+  renderHSQ();
+}
+
+function confirmHS(){
+  const q=ex.qs[ex.cur];
+  ex.confirmed[ex.cur]=true;
+  scoreAnswer(isCorrect(ex.ans[ex.cur],q));
+  renderHSQ();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DROPQ RENDERER (auto-score dropdown)
+// ═══════════════════════════════════════════════════════════════
+function renderDropQ(){
+  const q=ex.qs[ex.cur];
+  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const confirmed=ex.confirmed[ex.cur];
+  const peeked=ex.peeks[ex.cur];
+  const done=confirmed||peeked;
+  if(!Array.isArray(ex.dropSels[ex.cur]))ex.dropSels[ex.cur]=new Array(q.dropdowns.length).fill(null);
+  const sels=ex.dropSels[ex.cur];
+  const allSelected=sels.every(s=>s!==null);
+
+  const rowsHTML=q.dropdowns.map((d,i)=>{
+    const selected=sels[i];
+    let rowCls='dq-row';
+    if(done&&!peeked){
+      rowCls+=(selected===d.ans)?' dq-correct':' dq-wrong';
+    }
+    const selHTML=`<select class="dq-select" onchange="pickDrop(${i},this.value)" ${done?'disabled':''}>
+      <option value="">— selecciona —</option>
+      ${d.options.map((opt,j)=>`<option value="${j}" ${selected===j?'selected':''}>${opt}</option>`).join('')}
+    </select>`;
+    const corrNote=done&&!peeked&&selected!==d.ans?`<span style="font-size:11px;color:var(--green);margin-left:8px">→ ${d.options[d.ans]}</span>`:'';
+    const peekNote=peeked?`<span style="font-size:11px;color:var(--amber);margin-left:8px">→ ${d.options[d.ans]}</span>`:'';
+    return `<div class="${rowCls}"><span class="dq-label">${d.label}</span>${selHTML}${corrNote}${peekNote}</div>`;
+  }).join('');
+
+  let confirmBtn='';
+  if(!done)confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmDrop()" ${allSelected?'':'disabled'}>Confirmar respuestas</button>`;
+
+  let expHTML='';
+  if(peeked){expHTML=`<div class="exp" style="border-left-color:var(--amber)"><span class="verd vpeek">👁 RESPUESTA REVELADA</span>${q.exp||''}</div>`;}
+  else if(confirmed&&isStudy){
+    const ok=isCorrect(ex.dropSels[ex.cur],q);
+    expHTML=`<div class="exp" style="border-left-color:${ok?'var(--green)':'var(--red)'}"><span class="verd ${ok?'vok':'vbad'}">${ok?'✓ CORRECTO':'✗ INCORRECTO'}</span>${q.exp||''}</div>`;
+  } else if(confirmed&&!isStudy){
+    expHTML=`<div class="exp" style="border-left-color:var(--accent)"><span class="verd" style="color:var(--accent)">✓ Respuestas guardadas.</span></div>`;
+  }
+
+  $('ve').innerHTML=`${makeTopBar()}<div class="qcard">${q.q}</div>
+    <div style="font-size:11px;color:var(--accent);font-family:var(--mono);margin-bottom:10px;padding:5px 10px;background:rgba(59,130,246,.08);border-radius:6px;border:1px solid rgba(59,130,246,.2)">▼ DROPDOWN — Selecciona la opción correcta en cada desplegable</div>
+    ${rowsHTML}${confirmBtn}
+    <div id="exp-area">${expHTML}</div>${makeNavHTML(done)}`;
+  scrollDot();
+}
+
+function pickDrop(i,val){
+  if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
+  if(!Array.isArray(ex.dropSels[ex.cur]))ex.dropSels[ex.cur]=new Array(ex.qs[ex.cur].dropdowns.length).fill(null);
+  ex.dropSels[ex.cur][i]=val===''?null:parseInt(val);
+  renderDropQ();
+}
+
+function confirmDrop(){
+  const q=ex.qs[ex.cur];
+  ex.ans[ex.cur]=ex.dropSels[ex.cur];
+  ex.confirmed[ex.cur]=true;
+  scoreAnswer(isCorrect(ex.dropSels[ex.cur],q));
+  renderDropQ();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION / ACTIONS
+// ═══════════════════════════════════════════════════════════════
+function goQ(i){ex.cur=i;renderQ();}
+
+function peekAnswer(){
+  ex.peeks[ex.cur]=true;
+  renderQ();
+}
+
+function toggleFlag(){
+  ex.flagged[ex.cur]=!ex.flagged[ex.cur];
+  renderQ();
+}
+
+function scrollDot(){
+  setTimeout(()=>{
+    const wrap=$('ve')?.querySelector('.dots-wrap');
+    const curDot=wrap?.querySelectorAll('.dot-q')[ex.cur];
+    if(curDot&&wrap)curDot.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  },50);
+}
+
+function askExit(){
+  $('modal-area').innerHTML=`<div class="overlay"><div class="modal">
+    <h2>¿Salir de la sesión?</h2>
+    <p>El progreso de esta sesión se perderá si sales ahora.</p>
+    <div class="modal-btns">
+      <button class="btn btn-sm" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-sm btn-p" onclick="closeModal();home()">Salir</button>
+    </div>
+  </div></div>`;
+}
+
+function askFinish(){
+  const unanswered=ex.qs.filter((_,i)=>!isQAnswered(i)).length;
+  const warn=unanswered>0?`<p style="color:var(--amber);font-size:13px">⚠️ Tienes ${unanswered} pregunta${unanswered>1?'s':''} sin responder.</p>`:'';
+  $('modal-area').innerHTML=`<div class="overlay"><div class="modal">
+    <h2>¿Finalizar sesión?</h2>
+    ${warn}<p>Se mostrarán los resultados con la corrección completa.</p>
+    <div class="modal-btns">
+      <button class="btn btn-sm" onclick="closeModal()">Volver</button>
+      <button class="btn btn-sm btn-p" onclick="closeModal();finish()">Finalizar</button>
+    </div>
+  </div></div>`;
+}
+
+function askReset(){
+  $('modal-area').innerHTML=`<div class="overlay"><div class="modal">
+    <h2>Resetear progreso</h2>
+    <p>Se borrará todo el historial, preguntas falladas y estadísticas. Esta acción no se puede deshacer.</p>
+    <div class="modal-btns">
+      <button class="btn btn-sm" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-sm" style="background:var(--red-dim);border-color:var(--red-b);color:#fca5a5" onclick="closeModal();doReset()">Resetear</button>
+    </div>
+  </div></div>`;
+}
+
+function doReset(){localStorage.removeItem(LS);st=JSON.parse(JSON.stringify(DEF));home();}
+function closeModal(){$('modal-area').innerHTML='';}
+
+// ═══════════════════════════════════════════════════════════════
+// FINISH / RESULTS
+// ═══════════════════════════════════════════════════════════════
+function finish(){
+  const tot=ex.qs.length,sc=ex.sc,pct=Math.round((sc/tot)*100);
+  const col=pct>=80?'var(--green)':pct>=70?'var(--amber)':'var(--red)';
+  const L=['A','B','C','D','E'];
+
+  const rows=ex.qs.map((q,i)=>{
+    const answered=isQAnswered(i);
+    const ok=answered?isCorrect(ex.ans[i],q):false;
+    const peeked=ex.peeks[i];
+    let statusIcon=peeked?'👁':'';
+    if(answered)statusIcon=ok?'✓':'✗';
+    const statusCol=peeked?'var(--amber)':(answered?(ok?'var(--green)':'var(--red)'):'var(--text-muted)');
+
+    let ansDetail='';
+    if(q.type==='mc'){
+      const isMulti=Array.isArray(q.ans);
+      if(peeked){ansDetail=`<div>Respuesta correcta: ${isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(', '):(L[q.ans]+'. '+q.opts[q.ans])}</div>`;}
+      else if(answered){
+        const userAns=isMulti?(Array.isArray(ex.ans[i])?ex.ans[i].map(a=>L[a]).join(', '):'—'):(ex.ans[i]!==null?L[ex.ans[i]]:'—');
+        const corrAns=isMulti?q.ans.map(a=>L[a]).join(', '):L[q.ans];
+        ansDetail=`<div>Tu respuesta: ${userAns} | Correcta: ${corrAns}</div>`;
+      }
+    } else if(q.type==='dd'){
+      if(answered){
+        const corrCount=ex.ans[i]?q.ans.filter((a,j)=>a===ex.ans[i][j]).length:0;
+        ansDetail=`<div>${corrCount}/${q.ans.length} pasos correctos</div>`;
+      } else if(peeked) ansDetail=`<div>Respuesta revelada — ver explicación</div>`;
+    } else if(q.type==='hs'){
+      if(answered){
+        const corrCount=q.ans.filter((a,j)=>a===ex.ans[i]?.[j]).length;
+        ansDetail=`<div>${corrCount}/${q.statements.length} afirmaciones correctas</div>`;
+      }
+    } else if(q.type==='dropq'){
+      if(answered){
+        const corrCount=q.dropdowns.filter((d,j)=>d.ans===ex.dropSels[i]?.[j]).length;
+        ansDetail=`<div>${corrCount}/${q.dropdowns.length} selecciones correctas</div>`;
+      }
+    }
+
+    return `<div class="res-row" onclick="this.querySelector('.res-detail').classList.toggle('open')">
+      <span style="font-size:16px;color:${statusCol};min-width:20px">${statusIcon}</span>
+      <div class="res-q">
+        <span class="badge ${catCls(q.cat)}" style="font-size:9px;margin-bottom:4px;display:inline-block">${q.cat}</span><br>
+        ${q.q.replace(/<[^>]+>/g,' ').substring(0,90)}…
+        <div class="res-detail">
+          ${ansDetail}
+          <div style="margin-top:6px;color:var(--text-muted);font-size:11px">${q.exp||''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('vr').innerHTML=`
+    <div class="res-score">
+      <div class="res-pct" style="color:${col}">${pct}%</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:4px">${sc} correctas de ${tot} | ${ex.mode==='study'?'Estudio':ex.mode==='review'?'Repaso':'Test'}</div>
+    </div>
+    <div class="g3">
+      <div class="metric"><div class="metric-label">Correctas</div><div class="metric-value" style="color:var(--green)">${sc}</div></div>
+      <div class="metric"><div class="metric-label">Falladas</div><div class="metric-value" style="color:var(--red)">${tot-sc}</div></div>
+      <div class="metric"><div class="metric-label">Score</div><div class="metric-value" style="color:${col}">${pct}%</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn btn-p btn-sm" onclick="home()">← Inicio</button>
+      <button class="btn btn-sm" onclick="startSession('${ex.mode}')">🔁 Repetir</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Revisión de preguntas</div>
+      ${rows}
+    </div>`;
+  showV('vr');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FLASHCARD ENGINE
+// ═══════════════════════════════════════════════════════════════
+let fc={qs:[],cur:0,flipped:false,knew:0,again:0,done:[]};
+
+function startFlashcards(mode){
+  let pool;
+  if(mode==='failed') pool=shuffle(QB.filter(q=>st.failed.includes(q.id)));
+  else pool=shuffle([...QB]);
+  fc={qs:pool,cur:0,flipped:false,knew:0,again:0,done:new Array(pool.length).fill(null)};
+  showV('vfc');
+  renderFC();
+}
+
+function fcAnswerHTML(q){
+  const L=['A','B','C','D','E'];
+  if(q.type==='mc'){
+    const isMulti=Array.isArray(q.ans);
+    if(isMulti){
+      const correct=q.ans.map(i=>`<div style="padding:4px 0;color:#86efac">✓ ${L[i]}. ${q.opts[i]}</div>`).join('');
+      const wrong=q.opts.map((o,i)=>q.ans.includes(i)?null:`<div style="padding:2px 0;color:var(--text-muted);text-decoration:line-through;font-size:12px">${L[i]}. ${o}</div>`).filter(Boolean).join('');
+      return `<div style="margin-bottom:8px">${correct}${wrong}</div>`;
+    } else {
+      return q.opts.map((o,i)=>{
+        const ok=i===q.ans;
+        return `<div style="padding:3px 0;color:${ok?'#86efac':'var(--text-muted)'};${ok?'':' text-decoration:line-through;font-size:12px'}">${ok?'✓':''} ${L[i]}. ${o}</div>`;
+      }).join('');
+    }
+  }
+  if(q.type==='dd'){
+    return q.ans.map((a,i)=>`<div style="padding:3px 0;color:#86efac"><span style="font-family:var(--mono);font-size:11px;color:var(--accent);margin-right:6px">Paso ${i+1}</span>${a}</div>`).join('');
+  }
+  if(q.type==='hs'){
+    return q.statements.map((s,i)=>`<div style="padding:3px 0;font-size:13px"><span style="color:${q.ans[i]==='Yes'?'#86efac':'#fca5a5'};font-family:var(--mono);font-size:11px;margin-right:6px">${q.ans[i]}</span>${s}</div>`).join('');
+  }
+  if(q.type==='dropq'){
+    return q.dropdowns.map(d=>`<div style="padding:3px 0"><span style="color:var(--text-muted);font-size:12px">${d.label}</span><br><span style="color:#86efac;font-size:13px">→ ${d.options[d.ans]}</span></div>`).join('<br>');
+  }
+  return '';
+}
+
+function renderFC(){
+  if(fc.cur>=fc.qs.length){renderFCEnd();return;}
+  const q=fc.qs[fc.cur];
+  const tot=fc.qs.length;
+  const pct=Math.round((fc.cur/tot)*100);
+  const typeTag={dd:'↕ Ordenar pasos',mc:'☑ Selección múltiple',hs:'✓/✗ Sí / No',dropq:'▼ Desplegables'}[q.type]||q.type;
+
+  const ansHTML=fcAnswerHTML(q);
+
+  const frontH=200+Math.min(q.q.length*0.4,120);
+  const backH=250+Math.min((ansHTML.length+q.exp.length)*0.3,300);
+  const cardH=Math.max(frontH,backH);
+
+  $('vfc').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px">
+      <button class="btn btn-sm" onclick="home()">← Inicio</button>
+      <span style="font-family:var(--mono);font-size:12px;color:var(--text-muted)">${fc.cur+1} / ${tot}</span>
+      <span class="badge ${catCls(q.cat)}">${q.cat}</span>
+    </div>
+    <div class="prog-out" style="margin-bottom:12px"><div class="prog-in" style="width:${pct}%"></div></div>
+    <div class="fc-stat-bar">
+      <div class="fc-stat" style="background:rgba(34,197,94,.1);border:1px solid var(--green-b)">
+        <span style="color:var(--green)">${fc.knew}</span>
+        <span class="fc-stat-label">La sabía</span>
+      </div>
+      <div class="fc-stat" style="background:rgba(245,158,11,.08);border:1px solid var(--amber-b)">
+        <span style="color:var(--amber)">${fc.qs.length-fc.cur-1}</span>
+        <span class="fc-stat-label">Pendientes</span>
+      </div>
+      <div class="fc-stat" style="background:rgba(239,68,68,.08);border:1px solid var(--red-b)">
+        <span style="color:var(--red)">${fc.again}</span>
+        <span class="fc-stat-label">A repasar</span>
+      </div>
+    </div>
+
+    <div class="fc-wrap" style="height:${cardH}px" onclick="fcFlip()">
+      <div class="fc-inner${fc.flipped?' flipped':''}" id="fc-inner" style="min-height:${cardH}px">
+        <div class="fc-face fc-front" style="min-height:${cardH}px">
+          <div class="fc-hint">
+            <span class="badge ${catCls(q.cat)}" style="margin-right:6px">${q.cat}</span>
+            <span style="background:var(--surface2);padding:2px 7px;border-radius:4px;border:1px solid var(--border)">${typeTag}</span>
+          </div>
+          <div class="fc-q">${q.q}</div>
+          <div class="fc-tap">👆 Toca para ver la respuesta</div>
+        </div>
+        <div class="fc-face fc-back" style="min-height:${cardH}px">
+          <div class="fc-ans-label">✅ Respuesta correcta</div>
+          <div class="fc-ans-body">${ansHTML}</div>
+          <div class="fc-exp-body">${q.exp||''}</div>
+          ${fc.flipped?`<div class="fc-btns" onclick="event.stopPropagation()">
+            <button class="fc-again" onclick="fcRate(false)">✗ No la sabía</button>
+            <button class="fc-knew" onclick="fcRate(true)">✓ La sabía</button>
+          </div>`:''}
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:10px">
+      ${fc.cur>0?`<button class="btn btn-sm" onclick="fcPrev()">← Anterior</button>`:'<span></span>'}
+      <button class="btn btn-sm" style="margin-left:auto" onclick="fcSkip()">Saltar →</button>
+    </div>`;
+}
+
+function fcFlip(){
+  if(fc.flipped)return;
+  fc.flipped=true;
+  renderFC();
+}
+
+function fcRate(knew){
+  fc.done[fc.cur]=knew;
+  if(knew)fc.knew++;else fc.again++;
+  fc.cur++;
+  fc.flipped=false;
+  renderFC();
+}
+
+function fcSkip(){
+  fc.done[fc.cur]=null;
+  fc.cur++;
+  fc.flipped=false;
+  renderFC();
+}
+
+function fcPrev(){
+  if(fc.cur===0)return;
+  if(fc.done[fc.cur-1]===true)fc.knew--;
+  else if(fc.done[fc.cur-1]===false)fc.again--;
+  fc.done[fc.cur-1]=null;
+  fc.cur--;
+  fc.flipped=false;
+  renderFC();
+}
+
+function renderFCEnd(){
+  const tot=fc.qs.length;
+  const pct=Math.round((fc.knew/tot)*100);
+  const col=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
+  const againList=fc.qs.filter((_,i)=>fc.done[i]===false);
+  $('vfc').innerHTML=`
+    <div class="res-score">
+      <div class="res-pct" style="color:${col}">${pct}%</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Sesión de flashcards completada</div>
+    </div>
+    <div class="fc-stat-bar" style="margin-bottom:20px">
+      <div class="fc-stat" style="background:rgba(34,197,94,.1);border:1px solid var(--green-b)">
+        <span style="color:var(--green)">${fc.knew}</span>
+        <span class="fc-stat-label">La sabía</span>
+      </div>
+      <div class="fc-stat" style="background:rgba(239,68,68,.08);border:1px solid var(--red-b)">
+        <span style="color:var(--red)">${fc.again}</span>
+        <span class="fc-stat-label">A repasar</span>
+      </div>
+      <div class="fc-stat" style="background:var(--surface2);border:1px solid var(--border)">
+        <span style="color:var(--text-dim)">${tot}</span>
+        <span class="fc-stat-label">Total</span>
+      </div>
+    </div>
+    ${againList.length>0?`
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Preguntas a repasar (${againList.length})</div>
+      ${againList.map(q=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-dim)">${q.q.replace(/<[^>]+>/g,' ').substring(0,80)}…</div>`).join('')}
+    </div>`:''}
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-p btn-sm" onclick="home()">← Inicio</button>
+      <button class="btn btn-sm" onclick="startFlashcards('all')">🔁 Repetir todas</button>
+      ${fc.again>0?`<button class="btn btn-sm" style="border-color:var(--red-b);color:#fca5a5" onclick="fcRepeatFailed()">↺ Repetir fallos</button>`:''}
+    </div>`;
+}
+
+function fcRepeatFailed(){
+  const failed=fc.qs.filter((_,i)=>fc.done[i]===false);
+  fc={qs:shuffle(failed),cur:0,flipped:false,knew:0,again:0,done:new Array(failed.length).fill(null)};
+  renderFC();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+loadSt();
+home();
+</script>
+</body>
+</html>
