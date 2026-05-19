@@ -365,6 +365,7 @@ function home(){
   const col=r>=80?'var(--green)':r>=70?'var(--amber)':'var(--red)';
   $('vh').innerHTML=`
     <div class="line-accent"></div>
+    <div style="text-align:right;margin-bottom:4px"><span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">v3.1 · ${QB.length} preguntas</span></div>
     <div class="g3">
       <div class="metric"><div class="metric-label">Total</div><div class="metric-value" style="color:var(--accent)">${tot}</div></div>
       <div class="metric"><div class="metric-label">Correctas</div><div class="metric-value" style="color:var(--green)">${st.correct}</div></div>
