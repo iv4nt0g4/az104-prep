@@ -400,13 +400,13 @@ function home(){
     </button>`:''}
     <hr class="sep">
     <p class="slabel">Modo enfocado — Selección y Ordenar</p>
-    <button class="mode-card" onclick="startSession('study',['dd','mc'])" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05)">
+    <button class="mode-card" onclick="startSession('study','ddmcmulti')" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05)">
       <div class="mode-icon" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">⚡</div>
-      <div><div class="mode-title">Estudio — Solo selección y ordenar</div><div class="mode-desc">Solo preguntas de tipo <strong>ordenar pasos</strong> y <strong>selección múltiple</strong>. Feedback inmediato. ${QB.filter(q=>['dd','mc'].includes(q.type)).length} preguntas.</div></div>
+      <div><div class="mode-title">Estudio — Solo selección múltiple y ordenar</div><div class="mode-desc">Solo preguntas de <strong>ordenar pasos</strong> y <strong>varias respuestas correctas</strong>. Feedback inmediato. ${QB.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1)).length} preguntas.</div></div>
     </button>
-    <button class="mode-card" onclick="startSession('test',['dd','mc'])" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05)">
+    <button class="mode-card" onclick="startSession('test','ddmcmulti')" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05)">
       <div class="mode-icon" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">🏆</div>
-      <div><div class="mode-title">Test — Solo selección y ordenar</div><div class="mode-desc">Modo examen sin pistas con las ${QB.filter(q=>['dd','mc'].includes(q.type)).length} preguntas de ordenar y seleccionar. Corrección al final.</div></div>
+      <div><div class="mode-title">Test — Solo selección múltiple y ordenar</div><div class="mode-desc">Modo examen con las ${QB.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1)).length} preguntas de ordenar pasos y varias respuestas correctas. Corrección al final.</div></div>
     </button>
     <hr class="sep">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -419,7 +419,8 @@ function startSession(mode, filterTypes){
   let pool;
   if(mode==='review') pool=shuffle(QB.filter(q=>st.failed.includes(q.id)));
   else pool=shuffle(QB);
-  if(filterTypes && filterTypes.length) pool=pool.filter(q=>filterTypes.includes(q.type));
+  if(filterTypes==='ddmcmulti') pool=pool.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1));
+  else if(filterTypes && filterTypes.length) pool=pool.filter(q=>filterTypes.includes(q.type));
 
   ex={
     qs:pool, cur:0,
@@ -460,7 +461,7 @@ function isCorrect(ans,q){
 
 function isQAnswered(i){
   const q=ex.qs[i];
-  if(q.type==='dd'||q.type==='hs'||q.type==='dropq'||Array.isArray(q.ans))return ex.confirmed[i];
+  if(q.type==='dd'||q.type==='hs'||q.type==='dropq'||(Array.isArray(q.ans)&&q.ans.length>1))return ex.confirmed[i];
   return ex.ans[i]!==null;
 }
 
@@ -541,12 +542,12 @@ function scoreAnswer(ok){
 function renderMCQ(){
   const q=ex.qs[ex.cur];
   const isStudy=ex.mode==='study'||ex.mode==='review';
-  const isMulti=Array.isArray(q.ans);
+  const isMulti=Array.isArray(q.ans)&&q.ans.length>1;
   const confirmed=ex.confirmed[ex.cur];
   const peeked=ex.peeks[ex.cur];
   const done=confirmed||peeked;
   const answered=isMulti?confirmed:(ex.ans[ex.cur]!==null);
-  const pendingMulti=isMulti&&Array.isArray(ex.ans[ex.cur])?ex.ans[ex.cur]:[];
+  const userAnsArr=Array.isArray(ex.ans[ex.cur])?ex.ans[ex.cur]:(ex.ans[ex.cur]!==null?[ex.ans[ex.cur]]:[]);
   const L='ABCDEFGHIJ'.split('');
 
   const multiHint=isMulti
@@ -555,19 +556,18 @@ function renderMCQ(){
   const optHTML=q.opts.map((opt,i)=>{
     let cls='';
     const isDisabled=peeked||(answered&&(isStudy||isMulti));
-    if(peeked){if(isMulti?q.ans.includes(i):(i===q.ans))cls='reveal-c';}
+    if(peeked){if(q.ans.includes(i))cls='reveal-c';}
     else if(answered){
       if(isStudy||isMulti){
-        if(isMulti?q.ans.includes(i):(i===q.ans))cls='correct';
-        else if(isMulti?pendingMulti.includes(i):(i===ex.ans[ex.cur]))cls='wrong';
-      } else {if(i===ex.ans[ex.cur])cls='selected-pending';}
+        if(q.ans.includes(i))cls='correct';
+        else if(userAnsArr.includes(i))cls='wrong';
+      } else {if(userAnsArr.includes(i))cls='selected-pending';}
     } else {
-      if(isMulti&&pendingMulti.includes(i))cls='selected-pending';
-      else if(!isMulti&&i===ex.ans[ex.cur])cls='selected-pending';
+      if(userAnsArr.includes(i))cls='selected-pending';
     }
     const clickFn=isMulti?`pickMulti(${i})`:`pick(${i})`;
     const label=isMulti
-      ?`<span class="opt-l" style="border-radius:4px">${(answered&&q.ans.includes(i))||(!answered&&!peeked&&pendingMulti.includes(i))?'✓':L[i]}</span>`
+      ?`<span class="opt-l" style="border-radius:4px">${(answered&&q.ans.includes(i))||(!answered&&!peeked&&userAnsArr.includes(i))?'✓':L[i]}</span>`
       :`<span class="opt-l">${L[i]}</span>`;
     return `<button class="opt ${cls}" onclick="${clickFn}" ${isDisabled?'disabled':''}>${label}<span>${opt}</span></button>`;
   }).join('');
@@ -579,11 +579,11 @@ function renderMCQ(){
 
   let expHTML='';
   if(peeked){
-    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans]+'. '+q.opts[q.ans]);
+    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans[0]]+'. '+q.opts[q.ans[0]]);
     expHTML=`<div class="exp" style="border-left-color:var(--amber)"><span class="verd vpeek">👁 RESPUESTA REVELADA — ${corrLabel}</span>${q.exp||''}</div>`;
   } else if(answered&&isStudy){
     const ok=isCorrect(ex.ans[ex.cur],q);
-    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans]+'. '+q.opts[q.ans]);
+    const corrLabel=isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(' + '):(L[q.ans[0]]+'. '+q.opts[q.ans[0]]);
     expHTML=`<div class="exp" style="border-left-color:${ok?'var(--green)':'var(--red)'}"><span class="verd ${ok?'vok':'vbad'}">${ok?'✓ CORRECTO':'✗ INCORRECTO'} — ${corrLabel}</span>${q.exp||''}</div>`;
   } else if(answered&&!isStudy){
     expHTML=`<div class="exp" style="border-left-color:var(--accent)"><span class="verd" style="color:var(--accent)">✓ Respuesta guardada.</span></div>`;
@@ -596,9 +596,9 @@ function renderMCQ(){
 function pick(i){
   if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
   const isStudy=ex.mode==='study'||ex.mode==='review';
-  ex.ans[ex.cur]=i;
+  ex.ans[ex.cur]=[i];
   if(isStudy){
-    const ok=isCorrect(i,ex.qs[ex.cur]);
+    const ok=isCorrect([i],ex.qs[ex.cur]);
     scoreAnswer(ok);
   }
   renderMCQ();
