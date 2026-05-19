@@ -332,10 +332,10 @@ const QB = [
 // STATE
 // ═══════════════════════════════════════════════════════════════
 const LS='az104_dificiles_v1';
-const DEF={attempted:[],failed:[],correct:0,incorrect:0,bookmarks:[]};
+const DEF={attempted:[],failed:[],failedFocused:[],correct:0,incorrect:0,bookmarks:[]};
 let st=JSON.parse(JSON.stringify(DEF));
 
-let ex={qs:[],cur:0,ans:[],confirmed:[],peeks:[],flagged:[],ddState:[],dropSels:[],mode:'',sc:0,si:0};
+let ex={qs:[],cur:0,ans:[],confirmed:[],peeks:[],flagged:[],ddState:[],dropSels:[],mode:'',filter:'',sc:0,si:0};
 
 function loadSt(){try{const s=localStorage.getItem(LS);if(s){const p=JSON.parse(s);st={...DEF,...p};}}catch(e){}}
 function saveSt(){try{localStorage.setItem(LS,JSON.stringify(st));}catch(e){}}
@@ -359,12 +359,12 @@ function showV(id){
 // ═══════════════════════════════════════════════════════════════
 function home(){
   loadSt();
-  const tot=QB.length,att=st.attempted.length,fail=st.failed.length;
+  const tot=QB.length,att=st.attempted.length,fail=st.failed.length,failFoc=st.failedFocused.length;
   const r=(st.correct+st.incorrect)>0?Math.round((st.correct/(st.correct+st.incorrect))*100):0;
   const col=r>=80?'var(--green)':r>=70?'var(--amber)':'var(--red)';
   $('vh').innerHTML=`
     <div class="line-accent"></div>
-    <div style="text-align:right;margin-bottom:4px"><span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">v3.1 · ${QB.length} preguntas</span></div>
+    <div style="text-align:right;margin-bottom:4px"><span style="font-size:10px;color:var(--text-muted);font-family:var(--mono)">v3.2 · ${QB.length} preguntas</span></div>
     <div class="g3">
       <div class="metric"><div class="metric-label">Total</div><div class="metric-value" style="color:var(--accent)">${tot}</div></div>
       <div class="metric"><div class="metric-label">Correctas</div><div class="metric-value" style="color:var(--green)">${st.correct}</div></div>
@@ -411,6 +411,10 @@ function home(){
       <div class="mode-icon" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)">🏆</div>
       <div><div class="mode-title">Test — Solo selección múltiple y ordenar</div><div class="mode-desc">Modo examen con las ${QB.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1)).length} preguntas de ordenar pasos y varias respuestas correctas. Corrección al final.</div></div>
     </button>
+    ${failFoc>0?`<button class="mode-card" onclick="startSession('review_focused')" style="border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)">
+      <div class="mode-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">🔴</div>
+      <div><div class="mode-title">Repasar fallos — Selección y Ordenar (${failFoc})</div><div class="mode-desc">Preguntas que has fallado en el modo enfocado. Solo se registran fallos de este modo, independiente del banco principal.</div></div>
+    </button>`:''}
     <hr class="sep">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       ${att>0?`<button class="btn btn-sm" onclick="askReset()">↺ Resetear progreso</button>`:''}
@@ -421,8 +425,10 @@ function home(){
 function startSession(mode, filterTypes){
   let pool;
   if(mode==='review') pool=shuffle(QB.filter(q=>st.failed.includes(q.id)));
+  else if(mode==='review_focused') pool=shuffle(QB.filter(q=>st.failedFocused.includes(q.id)));
   else pool=shuffle(QB);
   if(filterTypes==='ddmcmulti') pool=pool.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1));
+  else if(mode==='review_focused') pool=pool.filter(q=>q.type==='dd'||(q.type==='mc'&&q.ans.length>1));
   else if(filterTypes && filterTypes.length) pool=pool.filter(q=>filterTypes.includes(q.type));
 
   ex={
@@ -433,7 +439,7 @@ function startSession(mode, filterTypes){
     flagged:new Array(pool.length).fill(false),
     ddState:pool.map(q=>q.type==='dd'?{slots:new Array(q.ans.length).fill(null),sel:null}:null),
     dropSels:pool.map(q=>q.type==='dropq'?new Array(q.dropdowns.length).fill(null):null),
-    mode, sc:0, si:0
+    mode, filter:filterTypes||'', sc:0, si:0
   };
   showV('ve');
   renderQ();
@@ -481,7 +487,7 @@ function renderQ(){
 
 // ── DOT NAV shared helper ────────────────────────────────────────
 function makeDots(){
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   return ex.qs.map((_,i)=>{
     const qi=ex.qs[i];const answered=isQAnswered(i);
     let bg='var(--surface3)',w='16px';
@@ -495,7 +501,7 @@ function makeDots(){
 
 function makeTopBar(){
   const tot=ex.qs.length,pct=Math.round((ex.cur/tot)*100);
-  const modeTag={test:'<span class="badge b-red">Test</span>',study:'<span class="badge b-blue">Estudio</span>',review:'<span class="badge b-amber">Repaso</span>'}[ex.mode];
+  const modeTag={test:'<span class="badge b-red">Test</span>',study:'<span class="badge b-blue">Estudio</span>',review:'<span class="badge b-amber">Repaso</span>',review_focused:'<span class="badge b-green">Repaso ⚡</span>'}[ex.mode];
   const q=ex.qs[ex.cur];
   const flagCls=ex.flagged[ex.cur]?'flagged':'';
   return `
@@ -528,13 +534,21 @@ function makeNavHTML(done){
 
 function scoreAnswer(ok){
   const q=ex.qs[ex.cur];
+  const isFocused=ex.filter==='ddmcmulti'||ex.mode==='review_focused';
   if(!st.attempted.includes(q.id)){
     st.attempted.push(q.id);
     if(ok){st.correct++;ex.sc++;}
-    else{st.incorrect++;ex.si++;if(!st.failed.includes(q.id))st.failed.push(q.id);}
+    else{
+      st.incorrect++;ex.si++;
+      if(isFocused){if(!st.failedFocused.includes(q.id))st.failedFocused.push(q.id);}
+      else{if(!st.failed.includes(q.id))st.failed.push(q.id);}
+    }
   } else {
-    if(ok){ex.sc++;const fi=st.failed.indexOf(q.id);if(fi>-1)st.failed.splice(fi,1);}
-    else ex.si++;
+    if(ok){
+      ex.sc++;
+      if(isFocused){const fi=st.failedFocused.indexOf(q.id);if(fi>-1)st.failedFocused.splice(fi,1);}
+      else{const fi=st.failed.indexOf(q.id);if(fi>-1)st.failed.splice(fi,1);}
+    } else ex.si++;
   }
   saveSt();
 }
@@ -544,7 +558,7 @@ function scoreAnswer(ok){
 // ═══════════════════════════════════════════════════════════════
 function renderMCQ(){
   const q=ex.qs[ex.cur];
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   const isMulti=Array.isArray(q.ans)&&q.ans.length>1;
   const confirmed=ex.confirmed[ex.cur];
   const peeked=ex.peeks[ex.cur];
@@ -598,7 +612,7 @@ function renderMCQ(){
 
 function pick(i){
   if(ex.confirmed[ex.cur]||ex.peeks[ex.cur])return;
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   ex.ans[ex.cur]=[i];
   if(isStudy){
     const ok=isCorrect([i],ex.qs[ex.cur]);
@@ -629,7 +643,7 @@ function confirmMulti(){
 // ═══════════════════════════════════════════════════════════════
 function renderDDQ(){
   const q=ex.qs[ex.cur];
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   const confirmed=ex.confirmed[ex.cur];
   const peeked=ex.peeks[ex.cur];
   const done=confirmed||peeked;
@@ -713,7 +727,7 @@ function confirmDD(){
 // ═══════════════════════════════════════════════════════════════
 function renderHSQ(){
   const q=ex.qs[ex.cur];
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   const confirmed=ex.confirmed[ex.cur];
   const peeked=ex.peeks[ex.cur];
   const done=confirmed||peeked;
@@ -765,7 +779,7 @@ function confirmHS(){
 // ═══════════════════════════════════════════════════════════════
 function renderDropQ(){
   const q=ex.qs[ex.cur];
-  const isStudy=ex.mode==='study'||ex.mode==='review';
+  const isStudy=ex.mode==='study'||ex.mode==='review'||ex.mode==='review_focused';
   const confirmed=ex.confirmed[ex.cur];
   const peeked=ex.peeks[ex.cur];
   const done=confirmed||peeked;
@@ -941,7 +955,7 @@ function finish(){
   $('vr').innerHTML=`
     <div class="res-score">
       <div class="res-pct" style="color:${col}">${pct}%</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-top:4px">${sc} correctas de ${tot} | ${ex.mode==='study'?'Estudio':ex.mode==='review'?'Repaso':'Test'}</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:4px">${sc} correctas de ${tot} | ${ex.mode==='study'?'Estudio':ex.mode==='review'?'Repaso fallos':ex.mode==='review_focused'?'Repaso ⚡ Fallos enfocado':'Test'}</div>
     </div>
     <div class="g3">
       <div class="metric"><div class="metric-label">Correctas</div><div class="metric-value" style="color:var(--green)">${sc}</div></div>
@@ -950,7 +964,7 @@ function finish(){
     </div>
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
       <button class="btn btn-p btn-sm" onclick="home()">← Inicio</button>
-      <button class="btn btn-sm" onclick="startSession('${ex.mode}')">🔁 Repetir</button>
+      <button class="btn btn-sm" onclick="startSession('${ex.mode}','${ex.filter}')">🔁 Repetir</button>
     </div>
     <div class="card">
       <div class="card-title">Revisión de preguntas</div>
