@@ -574,7 +574,7 @@ function renderMCQ(){
 
   let confirmBtn='';
   if(isMulti&&!answered&&!peeked){
-    confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmMulti()" ${pendingMulti.length===0?'disabled':''}>Confirmar selección (${pendingMulti.length}/${q.ans.length} elegidas)</button>`;
+    confirmBtn=`<button class="btn btn-p" style="margin-bottom:8px" onclick="confirmMulti()" ${userAnsArr.length===0?'disabled':''}>Confirmar selección (${userAnsArr.length}/${q.ans.length} elegidas)</button>`;
   }
 
   let expHTML='';
@@ -898,12 +898,12 @@ function finish(){
 
     let ansDetail='';
     if(q.type==='mc'){
-      const isMulti=Array.isArray(q.ans);
-      if(peeked){ansDetail=`<div>Respuesta correcta: ${isMulti?q.ans.map(a=>L[a]+'. '+q.opts[a]).join(', '):(L[q.ans]+'. '+q.opts[q.ans])}</div>`;}
+      const isMultiR=q.ans.length>1;
+      if(peeked){ansDetail=`<div>Respuesta correcta: ${q.ans.map(a=>L[a]+'. '+q.opts[a]).join(', ')}</div>`;}
       else if(answered){
-        const userAns=isMulti?(Array.isArray(ex.ans[i])?ex.ans[i].map(a=>L[a]).join(', '):'—'):(ex.ans[i]!==null?L[ex.ans[i]]:'—');
-        const corrAns=isMulti?q.ans.map(a=>L[a]).join(', '):L[q.ans];
-        ansDetail=`<div>Tu respuesta: ${userAns} | Correcta: ${corrAns}</div>`;
+        const uA=Array.isArray(ex.ans[i])?ex.ans[i].map(a=>L[a]).join(', '):'—';
+        const corrAns=q.ans.map(a=>L[a]).join(', ');
+        ansDetail=`<div>Tu respuesta: ${uA} | Correcta: ${corrAns}</div>`;
       }
     } else if(q.type==='dd'){
       if(answered){
@@ -973,17 +973,9 @@ function startFlashcards(mode){
 function fcAnswerHTML(q){
   const L='ABCDEFGHIJ'.split('');
   if(q.type==='mc'){
-    const isMulti=Array.isArray(q.ans);
-    if(isMulti){
-      const correct=q.ans.map(i=>`<div style="padding:4px 0;color:#86efac">✓ ${L[i]}. ${q.opts[i]}</div>`).join('');
-      const wrong=q.opts.map((o,i)=>q.ans.includes(i)?null:`<div style="padding:2px 0;color:var(--text-muted);text-decoration:line-through;font-size:12px">${L[i]}. ${o}</div>`).filter(Boolean).join('');
-      return `<div style="margin-bottom:8px">${correct}${wrong}</div>`;
-    } else {
-      return q.opts.map((o,i)=>{
-        const ok=i===q.ans;
-        return `<div style="padding:3px 0;color:${ok?'#86efac':'var(--text-muted)'};${ok?'':' text-decoration:line-through;font-size:12px'}">${ok?'✓':''} ${L[i]}. ${o}</div>`;
-      }).join('');
-    }
+    const correct=q.ans.map(i=>`<div style="padding:4px 0;color:#86efac">✓ ${L[i]}. ${q.opts[i]}</div>`).join('');
+    const wrong=q.opts.map((o,i)=>q.ans.includes(i)?null:`<div style="padding:2px 0;color:var(--text-muted);text-decoration:line-through;font-size:12px">${L[i]}. ${o}</div>`).filter(Boolean).join('');
+    return `<div style="margin-bottom:8px">${correct}${wrong}</div>`;
   }
   if(q.type==='dd'){
     return q.ans.map((a,i)=>`<div style="padding:3px 0;color:#86efac"><span style="font-family:var(--mono);font-size:11px;color:var(--accent);margin-right:6px">Paso ${i+1}</span>${a}</div>`).join('');
